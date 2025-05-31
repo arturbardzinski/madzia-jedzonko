@@ -5,39 +5,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Jedzonko Tracker</title>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 40px;
+            margin: 0;
+            padding: 0;
             background: #eef1f4;
+            overflow-x: hidden;
+        }
+
+        main {
+
+            padding: 80px 10px 0;     /* ≈wysokość .summary */
+            box-sizing: border-box;
         }
 
         .summary {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999; /* bardzo wysoki */
             backdrop-filter: blur(10px);
             background: rgba(255, 255, 255, 0.6);
-            padding: 20px 25px;
-            margin-bottom: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-            font-size: 18px;
+            padding: 12px clamp(10px, 3vw, 20px);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
             display: flex;
+            justify-content: space-around;
             flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+            gap: clamp(10px, 3vw, 20px);
+            font-size: clamp(14px, 3vw, 18px);
+            box-sizing: border-box;
         }
 
         .summary-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .label.short {
             display: none;
         }
+
         .label.full {
             display: inline;
         }
@@ -48,20 +62,23 @@
             padding: 4px 10px;
             border-radius: 999px;
         }
+
         .protein {
             background: #d6fff2;
             color: #006b5f;
             padding: 4px 10px;
             border-radius: 999px;
         }
+
         .carbs {
-            background: #e2d6ff; /* fioletowe jak było dla tłuszczy */
+            background: #e2d6ff;
             color: #4b0082;
             padding: 4px 10px;
             border-radius: 999px;
         }
+
         .fat {
-            background: #fffcd6; /* pastelowy żółty */
+            background: #fffcd6;
             color: #8a7300;
             padding: 4px 10px;
             border-radius: 999px;
@@ -71,44 +88,27 @@
             font-weight: bold;
         }
 
-        /* RESPONSYWNOŚĆ */
-        @media screen and (max-width: 600px) {
-            .label.full {
-                display: none;
-            }
-            .label.short {
-                display: inline;
-            }
-            .summary {
-                font-size: 16px;
-                flex-wrap: nowrap;
-                gap: 10px;
-                justify-content: space-between;
-                padding: 15px;
-            }
-        }
-
-        /* NAGŁÓWKI POSIŁKÓW */
         h2 {
             background: #007bff;
             color: white;
-            padding: 10px;
-            border-radius: 5px;
+            padding: clamp(10px, 3vw, 16px);
+            border-radius: 6px;
             text-align: center;
-            font-size: clamp(18px, 5vw, 26px);
-            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: clamp(18px, 5vw, 24px);
+            margin: clamp(16px, 4vw, 30px) 0 clamp(10px, 2vw, 20px);
         }
 
-        /* TABELA */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 40px;
-            font-size: clamp(14px, 3.5vw, 18px);
+            margin-bottom: clamp(30px, 5vw, 50px);
+            font-size: clamp(13px, 3.5vw, 18px);
         }
 
         th, td {
-            padding: 8px;
+            padding: clamp(6px, 2vw, 10px);
             border: 1px solid #ccc;
             text-align: left;
         }
@@ -120,36 +120,33 @@
         label {
             cursor: pointer;
         }
+
+        /* RESPONSYWNOŚĆ */
+        @media screen and (max-width: 600px) {
+            .summary {
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                padding: 12px clamp(6px, 4vw, 16px);
+            }
+
+            .label.full {
+                display: none;
+            }
+
+            .label.short {
+                display: inline;
+            }
+        }
     </style>
 </head>
 <body>
-
-<div class="summary">
-    <div class="summary-item">
-        <span class="label full">Kalorie:</span>
-        <span class="label short">K:</span>
-        <span class="kcal" id="totalKcal">0</span>
-        <span class="unit">kcal</span>
+<main>
+    <div class="summary">
+        <div class="summary-item"><span class="label full">Kalorie:</span><span class="label short">K:</span> <span class="kcal" id="totalKcal">0</span> <span class="unit">kcal</span></div>
+        <div class="summary-item"><span class="label full">Białko:</span><span class="label short">B:</span> <span class="protein" id="totalProtein">0</span> <span class="unit">g</span></div>
+        <div class="summary-item"><span class="label full">Węglowodany:</span><span class="label short">W:</span> <span class="carbs" id="totalCarbs">0</span> <span class="unit">g</span></div>
+        <div class="summary-item"><span class="label full">Tłuszcze:</span><span class="label short">T:</span> <span class="fat" id="totalFat">0</span> <span class="unit">g</span></div>
     </div>
-    <div class="summary-item">
-        <span class="label full">Białko:</span>
-        <span class="label short">B:</span>
-        <span class="protein" id="totalProtein">0</span>
-        <span class="unit">g</span>
-    </div>
-    <div class="summary-item">
-        <span class="label full">Węglowodany:</span>
-        <span class="label short">W:</span>
-        <span class="carbs" id="totalCarbs">0</span>
-        <span class="unit">g</span>
-    </div>
-    <div class="summary-item">
-        <span class="label full">Tłuszcze:</span>
-        <span class="label short">T:</span>
-        <span class="fat" id="totalFat">0</span>
-        <span class="unit">g</span>
-    </div>
-</div>
 
 
     <h2>ŚNIADANIE</h2>
@@ -2814,6 +2811,7 @@
         
         </tbody>
     </table>
+</main>
 
 
 <script>
