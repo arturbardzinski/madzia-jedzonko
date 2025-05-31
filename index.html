@@ -1,0 +1,2767 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Jedzonko Tracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background: #eef1f4;
+        }
+        .summary {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            font-size: 18px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .summary span {
+            display: inline-block;
+            font-weight: bold;
+            margin: 5px 10px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            min-width: 100px;
+            text-align: center;
+        }
+        #totalKcal { background-color: #ffd6d6; color: #8b0000; }
+        #totalProtein { background-color: #d6fff2; color: #006b5f; }
+        #totalCarbs { background-color: #fffcd6; color: #8a7300; }
+        #totalFat { background-color: #e2d6ff; color: #4b0082; }
+
+        h2 {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        tr:hover {
+            background: #f1f1f1;
+        }
+        label {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="summary">
+    <span>Kalorie:<br><span id="totalKcal">0</span> kcal</span>
+    <span>Białko:<br><span id="totalProtein">0</span> g</span>
+    <span>Węglowodany:<br><span id="totalCarbs">0</span> g</span>
+    <span>Tłuszcze:<br><span id="totalFat">0</span> g</span>
+</div>
+
+
+    <h2>ŚNIADANIE</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>✓</th>
+                <th>Nazwa</th>
+                <th>Kcal</th>
+                <th>Białko</th>
+                <th>Węgle</th>
+                <th>Tłuszcze</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="395" 
+                           data-protein="15" 
+                           data-carbs="57" 
+                           data-fat="14">
+                </td>
+                <td>Bajgiel z fetą, pomidorami i dipem (356g)</td>
+                <td>395</td>
+                <td>15</td>
+                <td>57</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="367" 
+                           data-protein="8" 
+                           data-carbs="62" 
+                           data-fat="12">
+                </td>
+                <td>Bruschetta pomidorowa (237g)</td>
+                <td>367</td>
+                <td>8</td>
+                <td>62</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="387" 
+                           data-protein="9" 
+                           data-carbs="66" 
+                           data-fat="13">
+                </td>
+                <td>Bruschetta z awokado (213g)</td>
+                <td>387</td>
+                <td>9</td>
+                <td>66</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="377" 
+                           data-protein="9" 
+                           data-carbs="63" 
+                           data-fat="13">
+                </td>
+                <td>Bruschetta z awokado a la Nigella (189g)</td>
+                <td>377</td>
+                <td>9</td>
+                <td>63</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="366" 
+                           data-protein="21" 
+                           data-carbs="45" 
+                           data-fat="13">
+                </td>
+                <td>Chleb z jajkiem, sałatą i pomidorem (322g)</td>
+                <td>366</td>
+                <td>21</td>
+                <td>45</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="388" 
+                           data-protein="15" 
+                           data-carbs="47" 
+                           data-fat="17">
+                </td>
+                <td>Grzanka z serem, awokado i jajkiem (317g)</td>
+                <td>388</td>
+                <td>15</td>
+                <td>47</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="382" 
+                           data-protein="10" 
+                           data-carbs="52" 
+                           data-fat="16">
+                </td>
+                <td>Jaglanka z jabłkiem i orzechami (441g)</td>
+                <td>382</td>
+                <td>10</td>
+                <td>52</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="357" 
+                           data-protein="9" 
+                           data-carbs="64" 
+                           data-fat="8">
+                </td>
+                <td>Jogurtowe musli z jabłkiem, cynamonem i orzechami (292g)</td>
+                <td>357</td>
+                <td>9</td>
+                <td>64</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="383" 
+                           data-protein="13" 
+                           data-carbs="66" 
+                           data-fat="8">
+                </td>
+                <td>Kakaowa owsianka z bananem i rodzynkami (362g)</td>
+                <td>383</td>
+                <td>13</td>
+                <td>66</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="392" 
+                           data-protein="16" 
+                           data-carbs="64" 
+                           data-fat="10">
+                </td>
+                <td>Kanapka z jajkiem, warzywami i oliwkami (328g)</td>
+                <td>392</td>
+                <td>16</td>
+                <td>64</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="385" 
+                           data-protein="9" 
+                           data-carbs="65" 
+                           data-fat="13">
+                </td>
+                <td>Kanapka z pastą z awokado (211g)</td>
+                <td>385</td>
+                <td>9</td>
+                <td>65</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="372" 
+                           data-protein="15" 
+                           data-carbs="49" 
+                           data-fat="15">
+                </td>
+                <td>Kanapka z pastą z awokado, jajkiem, sałatą i papryką (287g)</td>
+                <td>372</td>
+                <td>15</td>
+                <td>49</td>
+                <td>15</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="381" 
+                           data-protein="10" 
+                           data-carbs="59" 
+                           data-fat="15">
+                </td>
+                <td>Kanapka z pastą z awokado i papryką (356g)</td>
+                <td>381</td>
+                <td>10</td>
+                <td>59</td>
+                <td>15</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="381" 
+                           data-protein="8" 
+                           data-carbs="61" 
+                           data-fat="14">
+                </td>
+                <td>Kanapka z pomidorem i szczypiorkiem (216g)</td>
+                <td>381</td>
+                <td>8</td>
+                <td>61</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="401" 
+                           data-protein="16" 
+                           data-carbs="60" 
+                           data-fat="13">
+                </td>
+                <td>Kanapka z sałatą i pastą jajeczno-pieczarkową (247g)</td>
+                <td>401</td>
+                <td>16</td>
+                <td>60</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="420" 
+                           data-protein="26" 
+                           data-carbs="62" 
+                           data-fat="10">
+                </td>
+                <td>Kanapki z łososiem i pomidorkami koktajlowymi (315g)</td>
+                <td>420</td>
+                <td>26</td>
+                <td>62</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="364" 
+                           data-protein="9" 
+                           data-carbs="64" 
+                           data-fat="10">
+                </td>
+                <td>Kanapki z masłem czosnkowym, pomidorem i szczypior (259g)</td>
+                <td>364</td>
+                <td>9</td>
+                <td>64</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="358" 
+                           data-protein="18" 
+                           data-carbs="58" 
+                           data-fat="8">
+                </td>
+                <td>Kanapki z wędzonym tofu, rukolą, ogórkiem kisz. (331g)</td>
+                <td>358</td>
+                <td>18</td>
+                <td>58</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="366" 
+                           data-protein="8" 
+                           data-carbs="57" 
+                           data-fat="13">
+                </td>
+                <td>Kokosowa owsianka z mango (410g)</td>
+                <td>366</td>
+                <td>8</td>
+                <td>57</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="364" 
+                           data-protein="14" 
+                           data-carbs="42" 
+                           data-fat="16">
+                </td>
+                <td>Koktajl jogurt, mango, orzechy, kakaowa, chia (392g)</td>
+                <td>364</td>
+                <td>14</td>
+                <td>42</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="380" 
+                           data-protein="13" 
+                           data-carbs="74" 
+                           data-fat="6">
+                </td>
+                <td>Musli z maślanką, bananem i truskawką (455g)</td>
+                <td>380</td>
+                <td>13</td>
+                <td>74</td>
+                <td>6</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="368" 
+                           data-protein="16" 
+                           data-carbs="50" 
+                           data-fat="14">
+                </td>
+                <td>Musli z maślanką, gruszką i migdałami (355g)</td>
+                <td>368</td>
+                <td>16</td>
+                <td>50</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="394" 
+                           data-protein="14" 
+                           data-carbs="49" 
+                           data-fat="17">
+                </td>
+                <td>Musli z maślanką, truskawkami, orzechami i czekoladą (325g)</td>
+                <td>394</td>
+                <td>14</td>
+                <td>49</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="368" 
+                           data-protein="15" 
+                           data-carbs="50" 
+                           data-fat="13">
+                </td>
+                <td>Owsianka kakaowa z migdałami (217g)</td>
+                <td>368</td>
+                <td>15</td>
+                <td>50</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="376" 
+                           data-protein="8" 
+                           data-carbs="64" 
+                           data-fat="11">
+                </td>
+                <td>Owsianka z bananem, kokosem i mango (426g)</td>
+                <td>376</td>
+                <td>8</td>
+                <td>64</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="397" 
+                           data-protein="12" 
+                           data-carbs="54" 
+                           data-fat="15">
+                </td>
+                <td>Owsianka z bananem, truskawkami, orzechami i lnem (436g)</td>
+                <td>397</td>
+                <td>12</td>
+                <td>54</td>
+                <td>15</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="380" 
+                           data-protein="12" 
+                           data-carbs="60" 
+                           data-fat="12">
+                </td>
+                <td>Owsianka z cukinią i jabłkiem (470g)</td>
+                <td>380</td>
+                <td>12</td>
+                <td>60</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="372" 
+                           data-protein="10" 
+                           data-carbs="52" 
+                           data-fat="15">
+                </td>
+                <td>Owsianka z jabłkiem, migdałami i cynamonem (386g)</td>
+                <td>372</td>
+                <td>10</td>
+                <td>52</td>
+                <td>15</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="390" 
+                           data-protein="8" 
+                           data-carbs="58" 
+                           data-fat="16">
+                </td>
+                <td>Owsianka z musem truskawkowym i bananem (354g)</td>
+                <td>390</td>
+                <td>8</td>
+                <td>58</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="361" 
+                           data-protein="7" 
+                           data-carbs="77" 
+                           data-fat="4">
+                </td>
+                <td>Owsianka z tartym jabłkiem i rodzynkami (251g)</td>
+                <td>361</td>
+                <td>7</td>
+                <td>77</td>
+                <td>4</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="382" 
+                           data-protein="14" 
+                           data-carbs="55" 
+                           data-fat="14">
+                </td>
+                <td>Smoothie z kefirem, gruszką, bananem, truskawkami (555g)</td>
+                <td>382</td>
+                <td>14</td>
+                <td>55</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="357" 
+                           data-protein="10" 
+                           data-carbs="44" 
+                           data-fat="17">
+                </td>
+                <td>Smoothie z maślanką, bananem, awokado i kakao (357g)</td>
+                <td>357</td>
+                <td>10</td>
+                <td>44</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="390" 
+                           data-protein="10" 
+                           data-carbs="56" 
+                           data-fat="17">
+                </td>
+                <td>Smoothie z natką, gruszką i cytryną (722g)</td>
+                <td>390</td>
+                <td>10</td>
+                <td>56</td>
+                <td>17</td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+    <h2>OBIAD</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>✓</th>
+                <th>Nazwa</th>
+                <th>Kcal</th>
+                <th>Białko</th>
+                <th>Węgle</th>
+                <th>Tłuszcze</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="523" 
+                           data-protein="35" 
+                           data-carbs="70" 
+                           data-fat="12">
+                </td>
+                <td>Ananasowa zapiekanka z makaronem i krewetkami (344g)</td>
+                <td>523</td>
+                <td>35</td>
+                <td>70</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="512" 
+                           data-protein="23" 
+                           data-carbs="48" 
+                           data-fat="26">
+                </td>
+                <td>Bezmleczne naleśniki szpinakowe (607g)</td>
+                <td>512</td>
+                <td>23</td>
+                <td>48</td>
+                <td>26</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="518" 
+                           data-protein="23" 
+                           data-carbs="56" 
+                           data-fat="25">
+                </td>
+                <td>Curry z sezamowym tofu (508g)</td>
+                <td>518</td>
+                <td>23</td>
+                <td>56</td>
+                <td>25</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="513" 
+                           data-protein="33" 
+                           data-carbs="60" 
+                           data-fat="18">
+                </td>
+                <td>Dorsz w cytrynie z ryżem i pomidorem (439g)</td>
+                <td>513</td>
+                <td>33</td>
+                <td>60</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="416" 
+                           data-protein="32" 
+                           data-carbs="48" 
+                           data-fat="11">
+                </td>
+                <td>Dorsz, pęczak z soczewicą, marchwią, ogórkiem (504g)</td>
+                <td>416</td>
+                <td>32</td>
+                <td>48</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="522" 
+                           data-protein="23" 
+                           data-carbs="71" 
+                           data-fat="18">
+                </td>
+                <td>Frittata z ziemniakami i papryką (620g)</td>
+                <td>522</td>
+                <td>23</td>
+                <td>71</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="542" 
+                           data-protein="22" 
+                           data-carbs="75" 
+                           data-fat="20">
+                </td>
+                <td>Gulasz rybny (410g)</td>
+                <td>542</td>
+                <td>22</td>
+                <td>75</td>
+                <td>20</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="529" 
+                           data-protein="25" 
+                           data-carbs="69" 
+                           data-fat="18">
+                </td>
+                <td>Jajka sadzone z ziemniakami i mizerią (679g)</td>
+                <td>529</td>
+                <td>25</td>
+                <td>69</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="499" 
+                           data-protein="18" 
+                           data-carbs="80" 
+                           data-fat="14">
+                </td>
+                <td>Kasza z cukinią i pieczarkami (393g)</td>
+                <td>499</td>
+                <td>18</td>
+                <td>80</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="543" 
+                           data-protein="13" 
+                           data-carbs="96" 
+                           data-fat="13">
+                </td>
+                <td>Kaszą z groszkiem, cukinią i papryką (412g)</td>
+                <td>543</td>
+                <td>13</td>
+                <td>96</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="515" 
+                           data-protein="24" 
+                           data-carbs="82" 
+                           data-fat="13">
+                </td>
+                <td>Krewetki z brokułem, papryką i marchwią z ryżem (470g)</td>
+                <td>515</td>
+                <td>24</td>
+                <td>82</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="512" 
+                           data-protein="24" 
+                           data-carbs="77" 
+                           data-fat="14">
+                </td>
+                <td>Krewetki z czosnkiem i cytryną (227g)</td>
+                <td>512</td>
+                <td>24</td>
+                <td>77</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="491" 
+                           data-protein="41" 
+                           data-carbs="55" 
+                           data-fat="12">
+                </td>
+                <td>Krewetki zapiekane z pomidorkami, czosn+pietr (416g)</td>
+                <td>491</td>
+                <td>41</td>
+                <td>55</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="565" 
+                           data-protein="38" 
+                           data-carbs="41" 
+                           data-fat="29">
+                </td>
+                <td>Łosoś cytrynowy z sezamem, ziemniaki, brokuły (471g)</td>
+                <td>565</td>
+                <td>38</td>
+                <td>41</td>
+                <td>29</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="513" 
+                           data-protein="30" 
+                           data-carbs="43" 
+                           data-fat="26">
+                </td>
+                <td>Łosoś duszony ze szpinakiem z kaszą pęczak (324g)</td>
+                <td>513</td>
+                <td>30</td>
+                <td>43</td>
+                <td>26</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="533" 
+                           data-protein="41" 
+                           data-carbs="45" 
+                           data-fat="23">
+                </td>
+                <td>Łosoś pieczony ze szpinakiem i bulgurem (385g)</td>
+                <td>533</td>
+                <td>41</td>
+                <td>45</td>
+                <td>23</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="425" 
+                           data-protein="35" 
+                           data-carbs="27" 
+                           data-fat="21">
+                </td>
+                <td>Łosoś zapiekany z cukinią i ziemniakami (503g)</td>
+                <td>425</td>
+                <td>35</td>
+                <td>27</td>
+                <td>21</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="510" 
+                           data-protein="20" 
+                           data-carbs="83" 
+                           data-fat="12">
+                </td>
+                <td>Makaron tagliatelle z zielonymi warzywami (334g)</td>
+                <td>510</td>
+                <td>20</td>
+                <td>83</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="531" 
+                           data-protein="24" 
+                           data-carbs="73" 
+                           data-fat="16">
+                </td>
+                <td>Makaron w wegańskim sosie śmietanowym z tofu (454g)</td>
+                <td>531</td>
+                <td>24</td>
+                <td>73</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="528" 
+                           data-protein="25" 
+                           data-carbs="66" 
+                           data-fat="19">
+                </td>
+                <td>Makaron z cukinią i mozzarellą (315g)</td>
+                <td>528</td>
+                <td>25</td>
+                <td>66</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="514" 
+                           data-protein="29" 
+                           data-carbs="74" 
+                           data-fat="12">
+                </td>
+                <td>Makaron z krewetkami, papryką, fasolką i natką (397g)</td>
+                <td>514</td>
+                <td>29</td>
+                <td>74</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="517" 
+                           data-protein="27" 
+                           data-carbs="67" 
+                           data-fat="16">
+                </td>
+                <td>Makaron z krewetkami, pomidorami, bazylią (438g)</td>
+                <td>517</td>
+                <td>27</td>
+                <td>67</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="507" 
+                           data-protein="32" 
+                           data-carbs="51" 
+                           data-fat="20">
+                </td>
+                <td>Makaron z łososiem, pieczarkami i kukurydzą (331g)</td>
+                <td>507</td>
+                <td>32</td>
+                <td>51</td>
+                <td>20</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="519" 
+                           data-protein="36" 
+                           data-carbs="67" 
+                           data-fat="13">
+                </td>
+                <td>Makaron z tuńczykiem i pieczarkami w sosie pomid. (573g)</td>
+                <td>519</td>
+                <td>36</td>
+                <td>67</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="525" 
+                           data-protein="21" 
+                           data-carbs="51" 
+                           data-fat="28">
+                </td>
+                <td>Pieczony dorsz z ziemniakami i brokułami (539g)</td>
+                <td>525</td>
+                <td>21</td>
+                <td>51</td>
+                <td>28</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="508" 
+                           data-protein="26" 
+                           data-carbs="43" 
+                           data-fat="27">
+                </td>
+                <td>Pieczony łosoś na spagetti z cukinii (307g)</td>
+                <td>508</td>
+                <td>26</td>
+                <td>43</td>
+                <td>27</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="536" 
+                           data-protein="15" 
+                           data-carbs="62" 
+                           data-fat="27">
+                </td>
+                <td>Placki ziemniaczane (403g)</td>
+                <td>536</td>
+                <td>15</td>
+                <td>62</td>
+                <td>27</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="511" 
+                           data-protein="23" 
+                           data-carbs="56" 
+                           data-fat="23">
+                </td>
+                <td>Pomidorowa zapiekanka z makaronem, mozzarella (229g)</td>
+                <td>511</td>
+                <td>23</td>
+                <td>56</td>
+                <td>23</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="511" 
+                           data-protein="33" 
+                           data-carbs="53" 
+                           data-fat="21">
+                </td>
+                <td>Potrawka z ryby i krewetek z ryżem (452g)</td>
+                <td>511</td>
+                <td>33</td>
+                <td>53</td>
+                <td>21</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="507" 
+                           data-protein="28" 
+                           data-carbs="43" 
+                           data-fat="26">
+                </td>
+                <td>Pstrąg pieczony z cukinią (324g)</td>
+                <td>507</td>
+                <td>28</td>
+                <td>43</td>
+                <td>26</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="548" 
+                           data-protein="39" 
+                           data-carbs="63" 
+                           data-fat="14">
+                </td>
+                <td>Ryba i papryka w sosie pomidorowym z bulgurem (715g)</td>
+                <td>548</td>
+                <td>39</td>
+                <td>63</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="535" 
+                           data-protein="35" 
+                           data-carbs="62" 
+                           data-fat="19">
+                </td>
+                <td>Ryba w płatkach owsianych a la Jamie Oliver (541g)</td>
+                <td>535</td>
+                <td>35</td>
+                <td>62</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="544" 
+                           data-protein="40" 
+                           data-carbs="58" 
+                           data-fat="19">
+                </td>
+                <td>Ryba z cukinią i brokułami (496g)</td>
+                <td>544</td>
+                <td>40</td>
+                <td>58</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="543" 
+                           data-protein="36" 
+                           data-carbs="69" 
+                           data-fat="13">
+                </td>
+                <td>Ryba z czosnkową panierką (442g)</td>
+                <td>543</td>
+                <td>36</td>
+                <td>69</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="540" 
+                           data-protein="40" 
+                           data-carbs="67" 
+                           data-fat="14">
+                </td>
+                <td>Ryba z fasolką z sosem cytrynowo-oliwnym (465g)</td>
+                <td>540</td>
+                <td>40</td>
+                <td>67</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="530" 
+                           data-protein="26" 
+                           data-carbs="53" 
+                           data-fat="26">
+                </td>
+                <td>Ryba z pikantnym ryżem (427g)</td>
+                <td>530</td>
+                <td>26</td>
+                <td>53</td>
+                <td>26</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="507" 
+                           data-protein="39" 
+                           data-carbs="59" 
+                           data-fat="14">
+                </td>
+                <td>Ryba zapiekana z papryką i pieczarkami (491g)</td>
+                <td>507</td>
+                <td>39</td>
+                <td>59</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="516" 
+                           data-protein="35" 
+                           data-carbs="96" 
+                           data-fat="20">
+                </td>
+                <td>Ryba zapiekana z warzywami, ziemniakami i fasolką (808g)</td>
+                <td>516</td>
+                <td>35</td>
+                <td>96</td>
+                <td>20</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="513" 
+                           data-protein="23" 
+                           data-carbs="64" 
+                           data-fat="20">
+                </td>
+                <td>Smażone tofu z warzywami (702g)</td>
+                <td>513</td>
+                <td>23</td>
+                <td>64</td>
+                <td>20</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="524" 
+                           data-protein="37" 
+                           data-carbs="58" 
+                           data-fat="14">
+                </td>
+                <td>Sola w salsie z kaszą pęczak (634g)</td>
+                <td>524</td>
+                <td>37</td>
+                <td>58</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="544" 
+                           data-protein="27" 
+                           data-carbs="67" 
+                           data-fat="19">
+                </td>
+                <td>Spagetti z pomid. sosem z czerwoną soczewicą (406g)</td>
+                <td>544</td>
+                <td>27</td>
+                <td>67</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="555" 
+                           data-protein="18" 
+                           data-carbs="48" 
+                           data-fat="33">
+                </td>
+                <td>Szpinakowe pesto z makaronem (181g)</td>
+                <td>555</td>
+                <td>18</td>
+                <td>48</td>
+                <td>33</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="545" 
+                           data-protein="31" 
+                           data-carbs="62" 
+                           data-fat="19">
+                </td>
+                <td>Tajskie curry (425g)</td>
+                <td>545</td>
+                <td>31</td>
+                <td>62</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="481" 
+                           data-protein="23" 
+                           data-carbs="63" 
+                           data-fat="18">
+                </td>
+                <td>Tofu w sosie orzechowym (467g)</td>
+                <td>481</td>
+                <td>23</td>
+                <td>63</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="521" 
+                           data-protein="21" 
+                           data-carbs="73" 
+                           data-fat="19">
+                </td>
+                <td>Wegańskie curry z tofu (390g)</td>
+                <td>521</td>
+                <td>21</td>
+                <td>73</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="516" 
+                           data-protein="36" 
+                           data-carbs="61" 
+                           data-fat="16">
+                </td>
+                <td>Ziołowy mintaj z groszkiem i ryżem (349g)</td>
+                <td>516</td>
+                <td>36</td>
+                <td>61</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="510" 
+                           data-protein="29" 
+                           data-carbs="76" 
+                           data-fat="14">
+                </td>
+                <td>Zupa soczewicowa (749g)</td>
+                <td>510</td>
+                <td>29</td>
+                <td>76</td>
+                <td>14</td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+    <h2>PRZEKĄSKA</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>✓</th>
+                <th>Nazwa</th>
+                <th>Kcal</th>
+                <th>Białko</th>
+                <th>Węgle</th>
+                <th>Tłuszcze</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="299" 
+                           data-protein="13" 
+                           data-carbs="43" 
+                           data-fat="9">
+                </td>
+                <td>Ananas z serkiem wiejskim, miodem, sezamem (364g)</td>
+                <td>299</td>
+                <td>13</td>
+                <td>43</td>
+                <td>9</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="299" 
+                           data-protein="5" 
+                           data-carbs="42" 
+                           data-fat="12">
+                </td>
+                <td>Bananowy koktajl z czekoladą (465g)</td>
+                <td>299</td>
+                <td>5</td>
+                <td>42</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="305" 
+                           data-protein="5" 
+                           data-carbs="39" 
+                           data-fat="14">
+                </td>
+                <td>Bananowy koktajl z orzechami i czekoladą (360g)</td>
+                <td>305</td>
+                <td>5</td>
+                <td>39</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="318" 
+                           data-protein="6" 
+                           data-carbs="35" 
+                           data-fat="17">
+                </td>
+                <td>Cynamonowy koktajl z bananem (361g)</td>
+                <td>318</td>
+                <td>6</td>
+                <td>35</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="293" 
+                           data-protein="6" 
+                           data-carbs="22" 
+                           data-fat="21">
+                </td>
+                <td>Czekoladowy pudding z awokado (220g)</td>
+                <td>293</td>
+                <td>6</td>
+                <td>22</td>
+                <td>21</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="280" 
+                           data-protein="11" 
+                           data-carbs="34" 
+                           data-fat="12">
+                </td>
+                <td>Ekspresowe bananowe crumble z twarogiem (134g)</td>
+                <td>280</td>
+                <td>11</td>
+                <td>34</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="290" 
+                           data-protein="9" 
+                           data-carbs="34" 
+                           data-fat="14">
+                </td>
+                <td>Granola kakaowa z jogurtem i orzechami (151g)</td>
+                <td>290</td>
+                <td>9</td>
+                <td>34</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="306" 
+                           data-protein="7" 
+                           data-carbs="45" 
+                           data-fat="11">
+                </td>
+                <td>Gruszkowy koktajl z płatkami owsianymi (630g)</td>
+                <td>306</td>
+                <td>7</td>
+                <td>45</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="299" 
+                           data-protein="9" 
+                           data-carbs="30" 
+                           data-fat="16">
+                </td>
+                <td>Jabłkowy koktajl z nasionami (520g)</td>
+                <td>299</td>
+                <td>9</td>
+                <td>30</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="317" 
+                           data-protein="11" 
+                           data-carbs="46" 
+                           data-fat="11">
+                </td>
+                <td>Jabłkowy koktajl z orzechami i cynamonem (421g)</td>
+                <td>317</td>
+                <td>11</td>
+                <td>46</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="282" 
+                           data-protein="11" 
+                           data-carbs="39" 
+                           data-fat="10">
+                </td>
+                <td>Jogurt z truskawkami, orzechami i płatkami kukurydzianymi (340g)</td>
+                <td>282</td>
+                <td>11</td>
+                <td>39</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="287" 
+                           data-protein="14" 
+                           data-carbs="46" 
+                           data-fat="7">
+                </td>
+                <td>Jogurt z truskawkami i żurawiną (428g)</td>
+                <td>287</td>
+                <td>14</td>
+                <td>46</td>
+                <td>7</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="315" 
+                           data-protein="8" 
+                           data-carbs="44" 
+                           data-fat="13">
+                </td>
+                <td>Jogurt z wiórkami kokosowymi i morelami (208g)</td>
+                <td>315</td>
+                <td>8</td>
+                <td>44</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="228" 
+                           data-protein="5" 
+                           data-carbs="37" 
+                           data-fat="7">
+                </td>
+                <td>Kakaowy koktajl z bananem (350g)</td>
+                <td>228</td>
+                <td>5</td>
+                <td>37</td>
+                <td>7</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="294" 
+                           data-protein="7" 
+                           data-carbs="40" 
+                           data-fat="12">
+                </td>
+                <td>Kakaowy koktajl z bananem (570g)</td>
+                <td>294</td>
+                <td>7</td>
+                <td>40</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="291" 
+                           data-protein="11" 
+                           data-carbs="30" 
+                           data-fat="15">
+                </td>
+                <td>Kakaowo-orzechowy koktajl z bananem (300g)</td>
+                <td>291</td>
+                <td>11</td>
+                <td>30</td>
+                <td>15</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="315" 
+                           data-protein="6" 
+                           data-carbs="42" 
+                           data-fat="14">
+                </td>
+                <td>Koktajl z ananasem i bananem (410g)</td>
+                <td>315</td>
+                <td>6</td>
+                <td>42</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="307" 
+                           data-protein="6" 
+                           data-carbs="36" 
+                           data-fat="15">
+                </td>
+                <td>Koktajl z awokado, bananem i chia (395g)</td>
+                <td>307</td>
+                <td>6</td>
+                <td>36</td>
+                <td>15</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="303" 
+                           data-protein="5" 
+                           data-carbs="37" 
+                           data-fat="16">
+                </td>
+                <td>Koktajl z awokado, bananem i natką pietruszki (414g)</td>
+                <td>303</td>
+                <td>5</td>
+                <td>37</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="301" 
+                           data-protein="5" 
+                           data-carbs="37" 
+                           data-fat="16">
+                </td>
+                <td>Koktajl z awokado i bananem (410g)</td>
+                <td>301</td>
+                <td>5</td>
+                <td>37</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="270" 
+                           data-protein="12" 
+                           data-carbs="43" 
+                           data-fat="7">
+                </td>
+                <td>Koktajl borówkowy z płatkami (326g)</td>
+                <td>270</td>
+                <td>12</td>
+                <td>43</td>
+                <td>7</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="278" 
+                           data-protein="11" 
+                           data-carbs="45" 
+                           data-fat="7">
+                </td>
+                <td>Koktajl bananowo-truskawkowy ze słonecznikiem (415g)</td>
+                <td>278</td>
+                <td>11</td>
+                <td>45</td>
+                <td>7</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="294" 
+                           data-protein="9" 
+                           data-carbs="54" 
+                           data-fat="5">
+                </td>
+                <td>Koktajl bananowy na kefirze z cynamonem (407g)</td>
+                <td>294</td>
+                <td>9</td>
+                <td>54</td>
+                <td>5</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="280" 
+                           data-protein="10" 
+                           data-carbs="50" 
+                           data-fat="5">
+                </td>
+                <td>Koktajl z czereśni i banana (430g)</td>
+                <td>280</td>
+                <td>10</td>
+                <td>50</td>
+                <td>5</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="293" 
+                           data-protein="8" 
+                           data-carbs="33" 
+                           data-fat="14">
+                </td>
+                <td>Koktajl gruszkowy z nasionami i cynamonem (622g)</td>
+                <td>293</td>
+                <td>8</td>
+                <td>33</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="293" 
+                           data-protein="6" 
+                           data-carbs="46" 
+                           data-fat="10">
+                </td>
+                <td>Koktajl gruszkowy z rodzynkami i cynamonem (632g)</td>
+                <td>293</td>
+                <td>6</td>
+                <td>46</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="307" 
+                           data-protein="5" 
+                           data-carbs="74" 
+                           data-fat="2">
+                </td>
+                <td>Koktajl z jabłka, gruszki i pomarańczy ze szpinakiem (630g)</td>
+                <td>307</td>
+                <td>5</td>
+                <td>74</td>
+                <td>2</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="295" 
+                           data-protein="6" 
+                           data-carbs="42" 
+                           data-fat="10">
+                </td>
+                <td>Koktajl z jabłkiem, bananem i chia (435g)</td>
+                <td>295</td>
+                <td>6</td>
+                <td>42</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="259" 
+                           data-protein="12" 
+                           data-carbs="34" 
+                           data-fat="9">
+                </td>
+                <td>Koktajl jagodowy na kefirze z lnem i miodem (335g)</td>
+                <td>259</td>
+                <td>12</td>
+                <td>34</td>
+                <td>9</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="280" 
+                           data-protein="7" 
+                           data-carbs="37" 
+                           data-fat="12">
+                </td>
+                <td>Koktajl kakaowy z masłem orzechowym (330g)</td>
+                <td>280</td>
+                <td>7</td>
+                <td>37</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="300" 
+                           data-protein="8" 
+                           data-carbs="54" 
+                           data-fat="8">
+                </td>
+                <td>Koktajl pomarańcza, kiwi, jabłko, szpinak (460g)</td>
+                <td>300</td>
+                <td>8</td>
+                <td>54</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="286" 
+                           data-protein="7" 
+                           data-carbs="42" 
+                           data-fat="11">
+                </td>
+                <td>Koktajl ze szpinakiem i migdałami (445g)</td>
+                <td>286</td>
+                <td>7</td>
+                <td>42</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="317" 
+                           data-protein="12" 
+                           data-carbs="54" 
+                           data-fat="6">
+                </td>
+                <td>Koktajl truskawkowo-bananowy z chia i płatkami (460g)</td>
+                <td>317</td>
+                <td>12</td>
+                <td>54</td>
+                <td>6</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="308" 
+                           data-protein="6" 
+                           data-carbs="34" 
+                           data-fat="18">
+                </td>
+                <td>Krem orzechowy z kakao, jabłkiem i śliwkami (130g)</td>
+                <td>308</td>
+                <td>6</td>
+                <td>34</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="292" 
+                           data-protein="17" 
+                           data-carbs="40" 
+                           data-fat="8">
+                </td>
+                <td>Kremowy twarożek z bananem, truskawkami, orzechami (358g)</td>
+                <td>292</td>
+                <td>17</td>
+                <td>40</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="281" 
+                           data-protein="6" 
+                           data-carbs="26" 
+                           data-fat="18">
+                </td>
+                <td>Mandarynki i orzechy (210g)</td>
+                <td>281</td>
+                <td>6</td>
+                <td>26</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="284" 
+                           data-protein="6" 
+                           data-carbs="28" 
+                           data-fat="18">
+                </td>
+                <td>Mus czekoladowy z awokado (188g)</td>
+                <td>284</td>
+                <td>6</td>
+                <td>28</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="306" 
+                           data-protein="24" 
+                           data-carbs="14" 
+                           data-fat="17">
+                </td>
+                <td>Serek wiejski z miodem i orzechami (222g)</td>
+                <td>306</td>
+                <td>24</td>
+                <td>14</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="316" 
+                           data-protein="24" 
+                           data-carbs="33" 
+                           data-fat="11">
+                </td>
+                <td>Serek wiejski z truskawkami i suszonymi śliwkami (305g)</td>
+                <td>316</td>
+                <td>24</td>
+                <td>33</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="307" 
+                           data-protein="25" 
+                           data-carbs="41" 
+                           data-fat="5">
+                </td>
+                <td>Shake gruszkowy (540g)</td>
+                <td>307</td>
+                <td>25</td>
+                <td>41</td>
+                <td>5</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="294" 
+                           data-protein="6" 
+                           data-carbs="32" 
+                           data-fat="17">
+                </td>
+                <td>Smoothie ananasowe z natką (529g)</td>
+                <td>294</td>
+                <td>6</td>
+                <td>32</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="276" 
+                           data-protein="6" 
+                           data-carbs="48" 
+                           data-fat="8">
+                </td>
+                <td>Smoothie szpinak-awokado-banan (440g)</td>
+                <td>276</td>
+                <td>6</td>
+                <td>48</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="300" 
+                           data-protein="10" 
+                           data-carbs="42" 
+                           data-fat="11">
+                </td>
+                <td>Truskawkowo-bananowy koktajl z orzechami (400g)</td>
+                <td>300</td>
+                <td>10</td>
+                <td>42</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="317" 
+                           data-protein="13" 
+                           data-carbs="46" 
+                           data-fat="10">
+                </td>
+                <td>Truskawkowy koktajl z czekoladą (364g)</td>
+                <td>317</td>
+                <td>13</td>
+                <td>46</td>
+                <td>10</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="284" 
+                           data-protein="4" 
+                           data-carbs="68" 
+                           data-fat="10">
+                </td>
+                <td>Zielony koktajl (419g)</td>
+                <td>284</td>
+                <td>4</td>
+                <td>68</td>
+                <td>10</td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+    <h2>KOLACJA</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>✓</th>
+                <th>Nazwa</th>
+                <th>Kcal</th>
+                <th>Białko</th>
+                <th>Węgle</th>
+                <th>Tłuszcze</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="333" 
+                           data-protein="6" 
+                           data-carbs="32" 
+                           data-fat="22">
+                </td>
+                <td>Awokado z sosem czosnkowo-jogurtowym (185g)</td>
+                <td>333</td>
+                <td>6</td>
+                <td>32</td>
+                <td>22</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="320" 
+                           data-protein="10" 
+                           data-carbs="45" 
+                           data-fat="13">
+                </td>
+                <td>Bowl z ziemniakami, fasolką, cieciorką, pomid i ogórkami (507g)</td>
+                <td>320</td>
+                <td>10</td>
+                <td>45</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="295" 
+                           data-protein="15" 
+                           data-carbs="34" 
+                           data-fat="11">
+                </td>
+                <td>Brokułowa sałatka z jabłkiem i fasolą (366g)</td>
+                <td>295</td>
+                <td>15</td>
+                <td>34</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="292" 
+                           data-protein="12" 
+                           data-carbs="27" 
+                           data-fat="16">
+                </td>
+                <td>Bruschetta z łososiem, szpinakiem, pomidorami (233g)</td>
+                <td>292</td>
+                <td>12</td>
+                <td>27</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="296" 
+                           data-protein="13" 
+                           data-carbs="50" 
+                           data-fat="7">
+                </td>
+                <td>Burger z tofu (221g)</td>
+                <td>296</td>
+                <td>13</td>
+                <td>50</td>
+                <td>7</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="319" 
+                           data-protein="13" 
+                           data-carbs="32" 
+                           data-fat="17">
+                </td>
+                <td>Chleb z jajkiem sadzonym, grillowaną cukinią (347g)</td>
+                <td>319</td>
+                <td>13</td>
+                <td>32</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="288" 
+                           data-protein="11" 
+                           data-carbs="25" 
+                           data-fat="17">
+                </td>
+                <td>Grzanki z awokado i jajkiem w koszulce (201g)</td>
+                <td>288</td>
+                <td>11</td>
+                <td>25</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="321" 
+                           data-protein="14" 
+                           data-carbs="45" 
+                           data-fat="12">
+                </td>
+                <td>Jajka na miękko, kanapki z pomidorem i ogórkiem (325g)</td>
+                <td>321</td>
+                <td>14</td>
+                <td>45</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="287" 
+                           data-protein="11" 
+                           data-carbs="25" 
+                           data-fat="17">
+                </td>
+                <td>Jajka z awokado i grzanki (145g)</td>
+                <td>287</td>
+                <td>11</td>
+                <td>25</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="289" 
+                           data-protein="11" 
+                           data-carbs="36" 
+                           data-fat="13">
+                </td>
+                <td>Kanapka z awokado, natką i papryką (347g)</td>
+                <td>289</td>
+                <td>11</td>
+                <td>36</td>
+                <td>13</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="305" 
+                           data-protein="13" 
+                           data-carbs="30" 
+                           data-fat="16">
+                </td>
+                <td>Kanapka z jajkiem i sałatka z pomidorów i ogórków (398g)</td>
+                <td>305</td>
+                <td>13</td>
+                <td>30</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="311" 
+                           data-protein="11" 
+                           data-carbs="48" 
+                           data-fat="9">
+                </td>
+                <td>Kanapka z pastą fasolową i ogórkiem (272g)</td>
+                <td>311</td>
+                <td>11</td>
+                <td>48</td>
+                <td>9</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="284" 
+                           data-protein="21" 
+                           data-carbs="49" 
+                           data-fat="3">
+                </td>
+                <td>Kanapka z pastą twarogową, ogórkiem i rzodkiewką (378g)</td>
+                <td>284</td>
+                <td>21</td>
+                <td>49</td>
+                <td>3</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="301" 
+                           data-protein="8" 
+                           data-carbs="57" 
+                           data-fat="7">
+                </td>
+                <td>Kanapka z pastą z zielonego groszku (211g)</td>
+                <td>301</td>
+                <td>8</td>
+                <td>57</td>
+                <td>7</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="305" 
+                           data-protein="7" 
+                           data-carbs="47" 
+                           data-fat="12">
+                </td>
+                <td>Kanapki z awokado i rzodkiewką (232g)</td>
+                <td>305</td>
+                <td>7</td>
+                <td>47</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="303" 
+                           data-protein="7" 
+                           data-carbs="46" 
+                           data-fat="12">
+                </td>
+                <td>Kanapki z awokado, ogórkiem i szczypiorkiem (201g)</td>
+                <td>303</td>
+                <td>7</td>
+                <td>46</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="322" 
+                           data-protein="17" 
+                           data-carbs="7" 
+                           data-fat="9">
+                </td>
+                <td>Kanapki z musztardą, tofu i pomidorem (302g)</td>
+                <td>322</td>
+                <td>17</td>
+                <td>7</td>
+                <td>9</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="246" 
+                           data-protein="15" 
+                           data-carbs="21" 
+                           data-fat="12">
+                </td>
+                <td>Kanapki z pastą z awokado i oliwek (151g)</td>
+                <td>246</td>
+                <td>15</td>
+                <td>21</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="306" 
+                           data-protein="14" 
+                           data-carbs="60" 
+                           data-fat="4">
+                </td>
+                <td>Kanapki z pastą z groszku (231g)</td>
+                <td>306</td>
+                <td>14</td>
+                <td>60</td>
+                <td>4</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="280" 
+                           data-protein="15" 
+                           data-carbs="45" 
+                           data-fat="6">
+                </td>
+                <td>Kanapki z wędzonym tofu, rukolą i ogórkiem (284g)</td>
+                <td>280</td>
+                <td>15</td>
+                <td>45</td>
+                <td>6</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="318" 
+                           data-protein="20" 
+                           data-carbs="22" 
+                           data-fat="18">
+                </td>
+                <td>Omlet z pieczarkami (282g)</td>
+                <td>318</td>
+                <td>20</td>
+                <td>22</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="310" 
+                           data-protein="13" 
+                           data-carbs="41" 
+                           data-fat="12">
+                </td>
+                <td>Omlet z pomidorami (202g)</td>
+                <td>310</td>
+                <td>13</td>
+                <td>41</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="291" 
+                           data-protein="15" 
+                           data-carbs="44" 
+                           data-fat="8">
+                </td>
+                <td>Pasta z wędzonej makreli, pieczywo, papryka (205g)</td>
+                <td>291</td>
+                <td>15</td>
+                <td>44</td>
+                <td>8</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="327" 
+                           data-protein="20" 
+                           data-carbs="11" 
+                           data-fat="23">
+                </td>
+                <td>Pizza z kalafiora (251g)</td>
+                <td>327</td>
+                <td>20</td>
+                <td>11</td>
+                <td>23</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="282" 
+                           data-protein="6" 
+                           data-carbs="43" 
+                           data-fat="11">
+                </td>
+                <td>Pomidorowa bruschetta a la Nigella (214g)</td>
+                <td>282</td>
+                <td>6</td>
+                <td>43</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="292" 
+                           data-protein="6" 
+                           data-carbs="34" 
+                           data-fat="17">
+                </td>
+                <td>Sałatka a la guacamole z pieczywem (279g)</td>
+                <td>292</td>
+                <td>6</td>
+                <td>34</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="305" 
+                           data-protein="6" 
+                           data-carbs="32" 
+                           data-fat="19">
+                </td>
+                <td>Sałatka z awokado, pomidorem + pieczywo (335g)</td>
+                <td>305</td>
+                <td>6</td>
+                <td>32</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="285" 
+                           data-protein="14" 
+                           data-carbs="34" 
+                           data-fat="12">
+                </td>
+                <td>Sałatka z brokułem, jajkiem, kukurydzą, koperkiem (258g)</td>
+                <td>285</td>
+                <td>14</td>
+                <td>34</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="330" 
+                           data-protein="12" 
+                           data-carbs="43" 
+                           data-fat="11">
+                </td>
+                <td>Sałatka z fasoli, pomidora i natki (333g)</td>
+                <td>330</td>
+                <td>12</td>
+                <td>43</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="307" 
+                           data-protein="9" 
+                           data-carbs="46" 
+                           data-fat="12">
+                </td>
+                <td>Sałatka z groszkiem, awokado i pieczywo (357g)</td>
+                <td>307</td>
+                <td>9</td>
+                <td>46</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="307" 
+                           data-protein="12" 
+                           data-carbs="29" 
+                           data-fat="17">
+                </td>
+                <td>Sałatka z jajkiem, ogórkiem i papryką (323g)</td>
+                <td>307</td>
+                <td>12</td>
+                <td>29</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="296" 
+                           data-protein="8" 
+                           data-carbs="32" 
+                           data-fat="16">
+                </td>
+                <td>Sałatka z komosy, pomidora, rukoli, oliwek i papryki (293g)</td>
+                <td>296</td>
+                <td>8</td>
+                <td>32</td>
+                <td>16</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="310" 
+                           data-protein="31" 
+                           data-carbs="22" 
+                           data-fat="12">
+                </td>
+                <td>Sałatka z krewetkami, szpinakiem i ananasem (417g)</td>
+                <td>310</td>
+                <td>31</td>
+                <td>22</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="259" 
+                           data-protein="13" 
+                           data-carbs="8" 
+                           data-fat="20">
+                </td>
+                <td>Sałatka z łososiem wędzonym, awokado i pomidorem (179g)</td>
+                <td>259</td>
+                <td>13</td>
+                <td>8</td>
+                <td>20</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="267" 
+                           data-protein="19" 
+                           data-carbs="9" 
+                           data-fat="18">
+                </td>
+                <td>Sałatka z łososiem wędzonym, mozzarellą i warzywami (229g)</td>
+                <td>267</td>
+                <td>19</td>
+                <td>9</td>
+                <td>18</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="298" 
+                           data-protein="11" 
+                           data-carbs="43" 
+                           data-fat="11">
+                </td>
+                <td>Sałatka z marchewką, papryką, tofu i sosem jogurtowym (293g)</td>
+                <td>298</td>
+                <td>11</td>
+                <td>43</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="281" 
+                           data-protein="25" 
+                           data-carbs="17" 
+                           data-fat="14">
+                </td>
+                <td>Sałatka z porem, kukurydzą i jajkiem (358g)</td>
+                <td>281</td>
+                <td>25</td>
+                <td>17</td>
+                <td>14</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="295" 
+                           data-protein="8" 
+                           data-carbs="30" 
+                           data-fat="17">
+                </td>
+                <td>Sałatka pomidorowa z awokado (467g)</td>
+                <td>295</td>
+                <td>8</td>
+                <td>30</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="320" 
+                           data-protein="17" 
+                           data-carbs="28" 
+                           data-fat="17">
+                </td>
+                <td>Sałatka z pomidora i jajka z pieczywem (309g)</td>
+                <td>320</td>
+                <td>17</td>
+                <td>28</td>
+                <td>17</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="316" 
+                           data-protein="13" 
+                           data-carbs="26" 
+                           data-fat="19">
+                </td>
+                <td>Sałatka z rzodkiewką, tofu i orzechami (187g)</td>
+                <td>316</td>
+                <td>13</td>
+                <td>26</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="317" 
+                           data-protein="10" 
+                           data-carbs="31" 
+                           data-fat="19">
+                </td>
+                <td>Sałatka z soczewicą, suszonymi pomidorami (254g)</td>
+                <td>317</td>
+                <td>10</td>
+                <td>31</td>
+                <td>19</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="288" 
+                           data-protein="13" 
+                           data-carbs="12" 
+                           data-fat="22">
+                </td>
+                <td>Sałatka z tofu, roszponką, papryką i oliwkami (280g)</td>
+                <td>288</td>
+                <td>13</td>
+                <td>12</td>
+                <td>22</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="288" 
+                           data-protein="28" 
+                           data-carbs="22" 
+                           data-fat="9">
+                </td>
+                <td>Sałatka z tuńczykiem, fasolą i nasionami (460g)</td>
+                <td>288</td>
+                <td>28</td>
+                <td>22</td>
+                <td>9</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="300" 
+                           data-protein="21" 
+                           data-carbs="44" 
+                           data-fat="5">
+                </td>
+                <td>Sałatka z tuńczykiem, oliwkami i kaszą (175g)</td>
+                <td>300</td>
+                <td>21</td>
+                <td>44</td>
+                <td>5</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="316" 
+                           data-protein="24" 
+                           data-carbs="31" 
+                           data-fat="12">
+                </td>
+                <td>Sałatka z tuńczykiem, papryką i szczypiorkiem (341g)</td>
+                <td>316</td>
+                <td>24</td>
+                <td>31</td>
+                <td>12</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="320" 
+                           data-protein="23" 
+                           data-carbs="39" 
+                           data-fat="11">
+                </td>
+                <td>Sałatka z warzyw i fety (600g)</td>
+                <td>320</td>
+                <td>23</td>
+                <td>39</td>
+                <td>11</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="312" 
+                           data-protein="10" 
+                           data-carbs="19" 
+                           data-fat="23">
+                </td>
+                <td>Zielona sałatka ze szpinakiem, brokułem i słonecznikiem (344g)</td>
+                <td>312</td>
+                <td>10</td>
+                <td>19</td>
+                <td>23</td>
+            </tr>
+        
+            <tr>
+                <td>
+                    <input type="checkbox" class="meal" 
+                           data-kcal="326" 
+                           data-protein="30" 
+                           data-carbs="42" 
+                           data-fat="6">
+                </td>
+                <td>Żółty twarożek z rzodkiewką, papryką (423g)</td>
+                <td>326</td>
+                <td>30</td>
+                <td>42</td>
+                <td>6</td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+
+<script>
+    const checkboxes = document.querySelectorAll('.meal');
+    const totalKcal = document.getElementById('totalKcal');
+    const totalProtein = document.getElementById('totalProtein');
+    const totalCarbs = document.getElementById('totalCarbs');
+    const totalFat = document.getElementById('totalFat');
+
+    function updateSummary() {
+        let kcal = 0, protein = 0, carbs = 0, fat = 0;
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                kcal += parseInt(cb.dataset.kcal);
+                protein += parseInt(cb.dataset.protein);
+                carbs += parseInt(cb.dataset.carbs);
+                fat += parseInt(cb.dataset.fat);
+            }
+        });
+        totalKcal.textContent = kcal;
+        totalProtein.textContent = protein;
+        totalCarbs.textContent = carbs;
+        totalFat.textContent = fat;
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateSummary));
+</script>
+
+</body>
+</html>
