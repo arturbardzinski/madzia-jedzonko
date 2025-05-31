@@ -12,12 +12,13 @@
             margin: 0;
             padding: 0;
             background: #eef1f4;
-            overflow-x: hidden;
         }
 
         main {
-
-            padding: 80px 10px 0;     /* ≈wysokość .summary */
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 70px 10px 0; /* dopasowane do wysokości .summary */
             box-sizing: border-box;
         }
 
@@ -26,28 +27,37 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 9999; /* bardzo wysoki */
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.6);
-            padding: 12px clamp(10px, 3vw, 20px);
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            width: 100%;
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-            gap: clamp(10px, 3vw, 20px);
-            font-size: clamp(14px, 3vw, 18px);
+            gap: clamp(6px, 2vw, 16px);
+            padding: 12px clamp(6px, 3vw, 20px);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
             box-sizing: border-box;
         }
 
         .summary-item {
             display: flex;
             align-items: center;
-            gap: 6px;
             font-weight: bold;
             white-space: nowrap;
+            flex-shrink: 1;
+            font-size: clamp(12px, 2.5vw, 18px);
         }
 
+        .summary-item span {
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Styl dla skrótów i pełnych nazw */
         .label.short {
             display: none;
         }
@@ -56,6 +66,7 @@
             display: inline;
         }
 
+        /* Kolory makroskładników */
         .kcal {
             background: #ffd6d6;
             color: #8b0000;
@@ -84,10 +95,12 @@
             border-radius: 999px;
         }
 
+        /* Jednostki (g, kcal) */
         .unit {
             font-weight: bold;
         }
 
+        /* Nagłówki posiłków */
         h2 {
             background: #007bff;
             color: white;
@@ -100,6 +113,7 @@
             margin: clamp(16px, 4vw, 30px) 0 clamp(10px, 2vw, 20px);
         }
 
+        /* Tabela */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -121,12 +135,11 @@
             cursor: pointer;
         }
 
-        /* RESPONSYWNOŚĆ */
+        /* RWD dla małych ekranów */
         @media screen and (max-width: 600px) {
             .summary {
                 flex-wrap: nowrap;
                 justify-content: space-between;
-                padding: 12px clamp(6px, 4vw, 16px);
             }
 
             .label.full {
