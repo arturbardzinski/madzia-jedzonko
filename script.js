@@ -1,3 +1,50 @@
+
+function updateSearchTop() {
+    const summaryEl = document.querySelector('.summary');
+    const searchEl  = document.querySelector('.search-wrapper');
+    if (!summaryEl || !searchEl) return;
+
+    // Pobieramy aktualną wysokość .summary (w pikselach)
+    const summaryHeight = summaryEl.getBoundingClientRect().height;
+    // Nadpisujemy inline-owo wartość top dla .search-wrapper
+    searchEl.style.top = summaryHeight + 'px';
+}
+
+// Po pierwszym załadowaniu strony
+window.addEventListener('load', updateSearchTop);
+// I za każdym razem, gdy okno jest resize’owane (zmienia się szerokość/ wysokość)
+window.addEventListener('resize', updateSearchTop);
+
+function updateStickyOffsets() {
+    const summaryEl = document.querySelector('.summary');
+    const searchEl  = document.querySelector('.search-wrapper');
+    if (!summaryEl || !searchEl) return;
+
+    const summaryHeight = summaryEl.getBoundingClientRect().height;
+    const searchHeight  = searchEl.getBoundingClientRect().height;
+
+    searchEl.style.top = summaryHeight + 'px';
+
+    document.querySelectorAll('.meal-section h2').forEach(h2 => {
+        const h2Height = h2.getBoundingClientRect().height;
+        h2.style.top = (summaryHeight + searchHeight) + 'px';
+
+        const sectionEl = h2.closest('.meal-section');
+        if (!sectionEl) return;
+
+        const theadEl = sectionEl.querySelector('thead');
+        if (!theadEl) return;
+
+        const totalOffset = summaryHeight + searchHeight + h2Height;
+        theadEl.querySelectorAll('th').forEach(th => {
+            th.style.top = totalOffset + 'px';
+        });
+    });
+}
+
+window.addEventListener('load', updateStickyOffsets);
+window.addEventListener('resize', updateStickyOffsets);
+
 // 🔢 Elementy podsumowania
 const totalKcal = document.getElementById('totalKcal');
 const totalProtein = document.getElementById('totalProtein');
