@@ -4,153 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Jedzonko Tracker</title>
+    <title>Jedzonko</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #eef1f4;
-        }
+    <link rel="stylesheet" href="style.css" />
 
-        main {
-            width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 70px 10px 0; /* dopasowane do wysokości .summary */
-            box-sizing: border-box;
-        }
-
-        .summary {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: clamp(6px, 2vw, 16px);
-            padding: 12px clamp(6px, 3vw, 20px);
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            box-sizing: border-box;
-        }
-
-        .summary-item {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            white-space: nowrap;
-            flex-shrink: 1;
-            font-size: clamp(12px, 2.5vw, 18px);
-        }
-
-        .summary-item span {
-            display: inline-block;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Styl dla skrótów i pełnych nazw */
-        .label.short {
-            display: none;
-        }
-
-        .label.full {
-            display: inline;
-        }
-
-        /* Kolory makroskładników */
-        .kcal {
-            background: #ffd6d6;
-            color: #8b0000;
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        .protein {
-            background: #d6fff2;
-            color: #006b5f;
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        .carbs {
-            background: #e2d6ff;
-            color: #4b0082;
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        .fat {
-            background: #fffcd6;
-            color: #8a7300;
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        /* Jednostki (g, kcal) */
-        .unit {
-            font-weight: bold;
-        }
-
-        /* Nagłówki posiłków */
-        h2 {
-            background: #007bff;
-            color: white;
-            padding: clamp(10px, 3vw, 16px);
-            border-radius: 6px;
-            text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-            font-size: clamp(18px, 5vw, 24px);
-            margin: clamp(16px, 4vw, 30px) 0 clamp(10px, 2vw, 20px);
-        }
-
-        /* Tabela */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: clamp(30px, 5vw, 50px);
-            font-size: clamp(13px, 3.5vw, 18px);
-        }
-
-        th, td {
-            padding: clamp(6px, 2vw, 10px);
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-
-        tr:hover {
-            background: #f1f1f1;
-        }
-
-        label {
-            cursor: pointer;
-        }
-
-        /* RWD dla małych ekranów */
-        @media screen and (max-width: 600px) {
-            .summary {
-                flex-wrap: nowrap;
-                justify-content: space-between;
-            }
-
-            .label.full {
-                display: none;
-            }
-
-            .label.short {
-                display: inline;
-            }
-        }
-    </style>
 </head>
 <body>
 <main>
@@ -160,9 +18,13 @@
         <div class="summary-item"><span class="label full">Węglowodany:</span><span class="label short">W:</span> <span class="carbs" id="totalCarbs">0</span> <span class="unit">g</span></div>
         <div class="summary-item"><span class="label full">Tłuszcze:</span><span class="label short">T:</span> <span class="fat" id="totalFat">0</span> <span class="unit">g</span></div>
     </div>
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="Szukaj po nazwie lub składniku..." oninput="filterMeals()" />
+    </div>
 
-
+    <section class="meal-section" data-section="ŚNIADANIE">
     <h2>ŚNIADANIE</h2>
+        <div class="section-content">
     <table>
         <thead>
             <tr>
@@ -673,8 +535,12 @@
         
         </tbody>
     </table>
+        </div>
+    </section>
 
+    <section class="meal-section" data-section="OBIAD">
     <h2>OBIAD</h2>
+        <div class="section-content">
     <table>
         <thead>
             <tr>
@@ -1395,8 +1261,12 @@
         
         </tbody>
     </table>
+        </div>
+    </section>
 
+    <section class="meal-section" data-section="PRZEKĄSKA">
     <h2>PRZEKĄSKA</h2>
+        <div class="section-content">
     <table>
         <thead>
             <tr>
@@ -2087,8 +1957,12 @@
         
         </tbody>
     </table>
+        </div>
+    </section>
 
+    <section class="meal-section" data-section="KOLACJA">
     <h2>KOLACJA</h2>
+        <div class="section-content">
     <table>
         <thead>
             <tr>
@@ -2821,37 +2695,34 @@
                 <td>42</td>
                 <td>6</td>
             </tr>
-        
         </tbody>
     </table>
+        </div>
+    </section>
 </main>
+<div class="bottom-menu">
+    <button id="prevSection" aria-label="Poprzednia sekcja">
+        <span class="material-icons-outlined">arrow_back_ios</span>
+    </button>
+    <button onclick="copyMeals()" title="Kopiuj posiłki">
+        <span class="material-icons-outlined">content_copy</span>
+    </button>
+    <button onclick="copyMacros()" title="Kopiuj makro">
+        <span class="material-icons-outlined">assessment</span>
+    </button>
+    <button id="nextSection" aria-label="Następna sekcja">
+        <span class="material-icons-outlined">arrow_forward_ios</span>
+    </button>
+</div>
 
 
-<script>
-    const checkboxes = document.querySelectorAll('.meal');
-    const totalKcal = document.getElementById('totalKcal');
-    const totalProtein = document.getElementById('totalProtein');
-    const totalCarbs = document.getElementById('totalCarbs');
-    const totalFat = document.getElementById('totalFat');
+<div id="customAlert" class="custom-alert">
+    <div class="custom-alert-content">
+        <span id="customAlertText"></span>
+        <button onclick="closeAlert()">OK</button>
+    </div>
+</div>
 
-    function updateSummary() {
-        let kcal = 0, protein = 0, carbs = 0, fat = 0;
-        checkboxes.forEach(cb => {
-            if (cb.checked) {
-                kcal += parseInt(cb.dataset.kcal);
-                protein += parseInt(cb.dataset.protein);
-                carbs += parseInt(cb.dataset.carbs);
-                fat += parseInt(cb.dataset.fat);
-            }
-        });
-        totalKcal.textContent = kcal;
-        totalProtein.textContent = protein;
-        totalCarbs.textContent = carbs;
-        totalFat.textContent = fat;
-    }
-
-    checkboxes.forEach(cb => cb.addEventListener('change', updateSummary));
-</script>
-
+<script src="script.js" defer></script>
 </body>
 </html>
