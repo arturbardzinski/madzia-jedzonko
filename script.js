@@ -1,216 +1,318 @@
+;(function() {
+    // -----------------------------
+    // 1. CACHE’UJEMY ELEMENTY
+    // -----------------------------
+    const summaryEl       = document.querySelector('.summary');
+    const searchWrapper   = document.querySelector('.search-wrapper');
+    const mealSections    = Array.from(document.querySelectorAll('.meal-section'));
+    const totalKcal       = document.getElementById('totalKcal');
+    const totalProtein    = document.getElementById('totalProtein');
+    const totalCarbs      = document.getElementById('totalCarbs');
+    const totalFat        = document.getElementById('totalFat');
+    const searchInput     = document.getElementById('searchInput');
+    const prevSectionBtn  = document.getElementById('prevSection');
+    const nextSectionBtn  = document.getElementById('nextSection');
+    const customAlert     = document.getElementById('customAlert');
+    const customAlertText = document.getElementById('customAlertText');
 
-function updateSearchTop() {
-    const summaryEl = document.querySelector('.summary');
-    const searchEl  = document.querySelector('.search-wrapper');
-    if (!summaryEl || !searchEl) return;
-
-    // Pobieramy aktualną wysokość .summary (w pikselach)
-    const summaryHeight = summaryEl.getBoundingClientRect().height;
-    // Nadpisujemy inline-owo wartość top dla .search-wrapper
-    searchEl.style.top = summaryHeight + 'px';
-}
-
-// Po pierwszym załadowaniu strony
-window.addEventListener('load', updateSearchTop);
-// I za każdym razem, gdy okno jest resize’owane (zmienia się szerokość/ wysokość)
-window.addEventListener('resize', updateSearchTop);
-
-function updateStickyOffsets() {
-    const summaryEl = document.querySelector('.summary');
-    const searchEl  = document.querySelector('.search-wrapper');
-    if (!summaryEl || !searchEl) return;
-
-    const summaryHeight = summaryEl.getBoundingClientRect().height;
-    const searchHeight  = searchEl.getBoundingClientRect().height;
-
-    searchEl.style.top = summaryHeight + 'px';
-
-    document.querySelectorAll('.meal-section h2').forEach(h2 => {
-        const h2Height = h2.getBoundingClientRect().height;
-        h2.style.top = (summaryHeight + searchHeight) + 'px';
-
-        const sectionEl = h2.closest('.meal-section');
-        if (!sectionEl) return;
-
-        const theadEl = sectionEl.querySelector('thead');
-        if (!theadEl) return;
-
-        const totalOffset = summaryHeight + searchHeight + h2Height;
-        theadEl.querySelectorAll('th').forEach(th => {
-            th.style.top = totalOffset + 'px';
-        });
-    });
-}
-
-window.addEventListener('load', updateStickyOffsets);
-window.addEventListener('resize', updateStickyOffsets);
-
-// 🔢 Elementy podsumowania
-const totalKcal = document.getElementById('totalKcal');
-const totalProtein = document.getElementById('totalProtein');
-const totalCarbs = document.getElementById('totalCarbs');
-const totalFat = document.getElementById('totalFat');
-
-// 🔁 Aktualizacja podsumowania makroskładników
-function updateSummary() {
-    let kcal = 0, protein = 0, carbs = 0, fat = 0;
-    const checkboxes = document.querySelectorAll('.meal');
-
-    checkboxes.forEach(cb => {
-        if (cb.checked) {
-            kcal += parseInt(cb.dataset.kcal || "0", 10);
-            protein += parseInt(cb.dataset.protein || "0", 10);
-            carbs += parseInt(cb.dataset.carbs || "0", 10);
-            fat += parseInt(cb.dataset.fat || "0", 10);
-        }
-    });
-
-    totalKcal.textContent = kcal;
-    totalProtein.textContent = protein;
-    totalCarbs.textContent = carbs;
-    totalFat.textContent = fat;
-
-    updateSectionCounts();
-}
-
-// 🧮 Liczenie zaznaczonych checkboxów w sekcjach
-function updateSectionCounts() {
-    document.querySelectorAll(".meal-section").forEach(section => {
-        const checkedInSection = section.querySelectorAll(".meal:checked").length;
-        const header = section.querySelector("h2");
-
-        const baseName = header.dataset.baseTitle || header.textContent.split("(")[0].trim();
-        header.dataset.baseTitle = baseName;
-
-        header.textContent = checkedInSection > 0
-            ? `${baseName} (${checkedInSection} wybrane)`
-            : baseName;
-    });
-}
-
-// ✅ Nasłuchiwanie na zmianę checkboxów
-document.querySelectorAll('.meal').forEach(cb =>
-    cb.addEventListener('change', updateSummary)
-);
-
-// 📋 Kopiowanie nazw posiłków
-async function copyMeals() {
-    const selectedMeals = Array.from(document.querySelectorAll('.meal:checked'))
-        .map(cb => cb.closest('tr').querySelector('td:nth-child(2)').textContent.trim())
-        .join('\n');
-
-    if (selectedMeals) {
-        await navigator.clipboard.writeText(selectedMeals);
-        showAlert('Nazwy posiłków skopiowane do schowka!');
-    } else {
-        showAlert('Nie zaznaczono żadnych posiłków.');
-    }
-}
-
-// 📋 Kopiowanie makroskładników
-async function copyMacros() {
-    const kcal = totalKcal.textContent;
-    const protein = totalProtein.textContent;
-    const carbs = totalCarbs.textContent;
-    const fat = totalFat.textContent;
-
-    if (kcal === "0" && protein === "0" && carbs === "0" && fat === "0") {
-        showAlert('Nie wybrano posiłków!');
+    if (!summaryEl || !searchWrapper) {
+        // Jeśli nie ma wymaganych elementów, nie kontynuujemy.
         return;
     }
 
-    const summary = `K: ${kcal} kcal, B: ${protein} g, W: ${carbs} g, T: ${fat} g`;
-    await navigator.clipboard.writeText(summary);
-    showAlert('Podsumowanie makro skopiowane do schowka!');
-}
+    // -----------------------------
+    // 2. POMOCNICZE FUNKCJE
+    // -----------------------------
 
-// 🔔 Alerty
-function showAlert(message) {
-    document.getElementById('customAlertText').textContent = message;
-    document.getElementById('customAlert').style.display = 'flex';
-}
+    // Debounce dla resize
+    let resizeTimeout = null;
+    function debounceResize(fn, delay = 100) {
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+        resizeTimeout = setTimeout(fn, delay);
+    }
 
-function closeAlert() {
-    document.getElementById('customAlert').style.display = 'none';
-}
+    // Aktualizuje pozycje elementów "sticky"
+    function updateStickyOffsets() {
+        // Zabezpieczenie przed wywołaniem gdy elementy już nie istnieją
+        if (!summaryEl || !searchWrapper) return;
 
-// 🔎 Filtrowanie posiłków po nazwie/składniku
-function filterMeals() {
-    const query = document.getElementById("searchInput").value.trim().toLowerCase();
-    const sections = document.querySelectorAll("section[data-section]");
+        const summaryHeight = summaryEl.getBoundingClientRect().height;
+        const searchHeight  = searchWrapper.getBoundingClientRect().height;
 
-    sections.forEach(section => {
-        let foundInSection = false;
-        const rows = section.querySelectorAll("tbody tr");
+        // Ustawiamy top dla .search-wrapper
+        searchWrapper.style.top = summaryHeight + 'px';
 
-        rows.forEach(row => {
-            const mealName = row.querySelector("td:nth-child(2)")?.textContent?.toLowerCase() || "";
-            const match = mealName.includes(query);
-            row.style.display = match ? "" : "none";
-            if (match) foundInSection = true;
+        // Dla każdej sekcji posiłków: ustawiamy top dla nagłówka <h2> i nagłówka tabeli <th>
+        mealSections.forEach(section => {
+            const header = section.querySelector('h2');
+            if (!header) return;
+
+            const h2Height = header.getBoundingClientRect().height;
+            header.style.top = (summaryHeight + searchHeight) + 'px';
+
+            const thead = section.querySelector('thead');
+            if (!thead) return;
+
+            const totalOffset = summaryHeight + searchHeight + h2Height;
+            thead.querySelectorAll('th').forEach(th => {
+                th.style.top = totalOffset + 'px';
+            });
+        });
+    }
+
+    // Przydatne do przywracania scrolla
+    function withScrollRestoration(callback) {
+        const scrollX = window.scrollX;
+        const scrollY = window.scrollY;
+        callback();
+        // Odroczone przywrócenie, żeby DOM zdążył się przerysować
+        requestAnimationFrame(() => window.scrollTo(scrollX, scrollY));
+    }
+
+    // Aktualizuje sumę makroskładników
+    function updateSummary() {
+        let kcal = 0, protein = 0, carbs = 0, fat = 0;
+
+        // Pobieramy wszystkie zaznaczone checkboxy .meal
+        const checkedBoxes = document.querySelectorAll('.meal:checked');
+
+        checkedBoxes.forEach(cb => {
+            // Używamy od razu parseInt z podstawną walidacją
+            kcal    += +(cb.dataset.kcal    || 0);
+            protein += +(cb.dataset.protein|| 0);
+            carbs   += +(cb.dataset.carbs  || 0);
+            fat     += +(cb.dataset.fat    || 0);
         });
 
-        section.style.display = foundInSection || query === "" ? "" : "none";
+        // Nadpisujemy wartości w podsumowaniu
+        totalKcal.textContent    = kcal;
+        totalProtein.textContent = protein;
+        totalCarbs.textContent   = carbs;
+        totalFat.textContent     = fat;
+
+        // Aktualizujemy licznik zaznaczonych w każdej sekcji
+        updateSectionCounts();
+    }
+
+    // Zlicza zaznaczone .meal w każdej sekcji i aktualizuje nagłówek <h2>
+    function updateSectionCounts() {
+        mealSections.forEach(section => {
+            // Ile zaznaczonych w sekcji
+            const count = section.querySelectorAll('.meal:checked').length;
+            const header = section.querySelector('h2');
+            if (!header) return;
+
+            // Jeżeli nie zapisaliśmy bazowej treści tytułu — bierzemy wszystko przed nawiasem
+            let baseName = header.dataset.baseTitle;
+            if (!baseName) {
+                baseName = header.textContent.split('(')[0].trim();
+                header.dataset.baseTitle = baseName;
+            }
+
+            header.textContent = count > 0
+                ? `${baseName} (${count} wybrane)`
+                : baseName;
+        });
+    }
+
+    // Kopiuje nazwy zaznaczonych posiłków do schowka
+    async function copyMeals() {
+        const selectedMeals = Array
+            .from(document.querySelectorAll('.meal:checked'))
+            .map(cb => {
+                const td = cb.closest('tr')?.querySelector('td:nth-child(2)');
+                return td ? td.textContent.trim() : '';
+            })
+            .filter(text => text !== '')
+            .join('\n');
+
+        if (selectedMeals) {
+            await navigator.clipboard.writeText(selectedMeals);
+            showAlert('Nazwy posiłków skopiowane do schowka!');
+        } else {
+            showAlert('Nie zaznaczono żadnych posiłków.');
+        }
+    }
+
+    // Kopiuje podsumowanie makroskładników do schowka
+    async function copyMacros() {
+        const kcal    = totalKcal.textContent;
+        const protein = totalProtein.textContent;
+        const carbs   = totalCarbs.textContent;
+        const fat     = totalFat.textContent;
+
+        if (kcal === "0" && protein === "0" && carbs === "0" && fat === "0") {
+            showAlert('Nie wybrano posiłków!');
+            return;
+        }
+
+        const summary = `K: ${kcal} kcal, B: ${protein} g, W: ${carbs} g, T: ${fat} g`;
+        await navigator.clipboard.writeText(summary);
+        showAlert('Podsumowanie makro skopiowane do schowka!');
+    }
+
+    // Pokazuje niestandardowy alert
+    function showAlert(message) {
+        customAlertText.textContent = message;
+        customAlert.style.display = 'flex';
+    }
+
+    // Ukrywa niestandardowy alert
+    function closeAlert() {
+        customAlert.style.display = 'none';
+    }
+
+    // Filtrowanie posiłków po nazwie/składniku
+    function filterMeals() {
+        const query = searchInput.value.trim().toLowerCase();
+
+        mealSections.forEach(section => {
+            let foundInSection = false;
+            const rows = section.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                const mealName = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
+                const match = mealName.includes(query);
+                row.style.display = match ? '' : 'none';
+                if (match) foundInSection = true;
+            });
+
+            // Jeśli w sekcji nic nie pasuje i są wpisane znaki — chowamy całą sekcję
+            section.style.display = (foundInSection || query === '') ? '' : 'none';
+        });
+
+        // Po ukryciu/odkryciu ponownie odświeżamy liczniki w nagłówkach
+        updateSectionCounts();
+    }
+
+    // Przełączanie (zwinięcie/rozwinięcie) danej sekcji
+    function toggleSection(header) {
+        // Przed zmianą informujemy o bieżącym scrollu
+        withScrollRestoration(() => {
+            const section = header.closest('.meal-section');
+            if (section) {
+                section.classList.toggle('collapsed');
+            }
+        });
+    }
+
+    // Obsługa gestów swipe (tylko na dotykowych urządzeniach)
+    let touchStartX = 0;
+    let touchEndX   = 0;
+
+    function handleSwipeGesture() {
+        // Tablica widocznych sekcji w kolejności
+        const sectionsVisible = mealSections.filter(sec => !sec.classList.contains('collapsed'));
+        // Znajdź index pierwszej (i jedynej) otwartej sekcji
+        let openIndex = -1;
+        mealSections.forEach((sec, idx) => {
+            if (!sec.classList.contains('collapsed')) {
+                openIndex = idx;
+            }
+        });
+
+        if (openIndex < 0) return;
+
+        if (touchEndX < touchStartX - 50 && openIndex < mealSections.length - 1) {
+            // Swipe w lewo → idziemy do następnej sekcji
+            withScrollRestoration(() => {
+                mealSections[openIndex].classList.add('collapsed');
+                mealSections[openIndex + 1].classList.remove('collapsed');
+                mealSections[openIndex + 1].scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        if (touchEndX > touchStartX + 50 && openIndex > 0) {
+            // Swipe w prawo → idziemy do poprzedniej sekcji
+            withScrollRestoration(() => {
+                mealSections[openIndex].classList.add('collapsed');
+                mealSections[openIndex - 1].classList.remove('collapsed');
+                mealSections[openIndex - 1].scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    }
+
+    // Nawigacja strzałkami w bottom-menu
+    function navigateSection(direction) {
+        let openIndex = -1;
+        mealSections.forEach((sec, idx) => {
+            if (!sec.classList.contains('collapsed')) {
+                openIndex = idx;
+            }
+        });
+        const nextIndex = openIndex + direction;
+        if (nextIndex >= 0 && nextIndex < mealSections.length) {
+            withScrollRestoration(() => {
+                mealSections[openIndex].classList.add('collapsed');
+                mealSections[nextIndex].classList.remove('collapsed');
+                mealSections[nextIndex].scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    }
+
+    // -----------------------------
+    // 3. PODPINAMY LISTENERY
+    // -----------------------------
+    // 3.1. Po załadowaniu i przy resize: odpalamy updateStickyOffsets (z debounce)
+    window.addEventListener('load', updateStickyOffsets);
+    window.addEventListener('resize', () => debounceResize(updateStickyOffsets, 100));
+
+    // 3.2. Event delegation: nasłuchujemy na zmiany checkboxów .meal
+    document.addEventListener('change', (e) => {
+        const target = e.target;
+        if (target.classList.contains('meal') && target.type === 'checkbox') {
+            // Przy zaznaczeniu/odznaczeniu checkboxa: aktualizujemy sumę, ale przywracamy też scroll
+            withScrollRestoration(updateSummary);
+        }
     });
 
-    updateSectionCounts();
-}
-
-// ⬇️⬆️ Zwijanie/rozwijanie sekcji
-document.querySelectorAll(".meal-section h2").forEach(header => {
-    header.addEventListener("click", () => {
-        const section = header.closest(".meal-section");
-        section.classList.toggle("collapsed");
+    // 3.3. Kliknięcie w nagłówek <h2> sekcji → toggle collapse
+    mealSections.forEach(section => {
+        const header = section.querySelector('h2');
+        if (header) {
+            header.addEventListener('click', () => toggleSection(header));
+        }
     });
-});
 
-// 👆👉 Gesty swipe (mobile)
-let touchStartX = 0;
-let touchEndX = 0;
-
-document.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-}, false);
-
-document.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipeGesture();
-}, false);
-
-function handleSwipeGesture() {
-    const sections = Array.from(document.querySelectorAll('.meal-section'));
-    const openIndex = sections.findIndex(sec => !sec.classList.contains('collapsed'));
-
-    if (touchEndX < touchStartX - 50 && openIndex < sections.length - 1) {
-        sections[openIndex].classList.add('collapsed');
-        sections[openIndex + 1].classList.remove('collapsed');
-        sections[openIndex + 1].scrollIntoView({ behavior: 'smooth' });
+    // 3.4. Filtrowanie posiłków przy wpisywaniu w input
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            // Przyćmienie scrolla podczas filtrowania bardzo rzadko będzie widoczne,
+            // ale zachowujemy spójność w użytkowaniu z przywracaniem scrolla.
+            withScrollRestoration(filterMeals);
+        });
     }
 
-    if (touchEndX > touchStartX + 50 && openIndex > 0) {
-        sections[openIndex].classList.add('collapsed');
-        sections[openIndex - 1].classList.remove('collapsed');
-        sections[openIndex - 1].scrollIntoView({ behavior: 'smooth' });
+    // 3.5. Kopiowanie nazw posiłków (załóż, że masz przycisk lub inny element wywołujący copyMeals)
+    const copyMealsBtn = document.getElementById('copyMealsBtn');
+    if (copyMealsBtn) {
+        copyMealsBtn.addEventListener('click', copyMeals);
     }
-}
 
-// 🔁 Nawigacja strzałkami w bottom-menu
-document.getElementById('prevSection').addEventListener('click', () => {
-    navigateSection(-1);
-});
-
-document.getElementById('nextSection').addEventListener('click', () => {
-    navigateSection(1);
-});
-
-function navigateSection(direction) {
-    const sections = Array.from(document.querySelectorAll('.meal-section'));
-    const openIndex = sections.findIndex(sec => !sec.classList.contains('collapsed'));
-    const nextIndex = openIndex + direction;
-
-    if (nextIndex >= 0 && nextIndex < sections.length) {
-        sections[openIndex].classList.add('collapsed');
-        sections[nextIndex].classList.remove('collapsed');
-        sections[nextIndex].scrollIntoView({ behavior: 'smooth' });
+    // 3.6. Kopiowanie makroskładników (analogicznie)
+    const copyMacrosBtn = document.getElementById('copyMacrosBtn');
+    if (copyMacrosBtn) {
+        copyMacrosBtn.addEventListener('click', copyMacros);
     }
-}
+
+    // 3.7. Zamknięcie alertu
+    const alertCloseBtn = document.getElementById('customAlertClose');
+    if (alertCloseBtn) {
+        alertCloseBtn.addEventListener('click', closeAlert);
+    }
+
+
+    // 3.9. Nawigacja w bottom-menu
+    if (prevSectionBtn) {
+        prevSectionBtn.addEventListener('click', () => navigateSection(-1));
+    }
+    if (nextSectionBtn) {
+        nextSectionBtn.addEventListener('click', () => navigateSection(1));
+    }
+
+    // 3.10. Inicjalne odświeżenie sum i nagłówków (gdy ktoś wstępnie ma już zaznaczone checkboxy)
+    updateSummary();
+    updateStickyOffsets();
+})();
