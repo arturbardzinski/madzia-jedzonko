@@ -23,46 +23,6 @@
     // 2. POMOCNICZE FUNKCJE
     // ---------------------------------------
 
-    // Prosty debounce, żeby resize nie wywoływał updateStickyOffsets zbyt często
-    let resizeTimeout = null;
-    function debounceResize(fn, delay = 100) {
-        if (resizeTimeout) clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(fn, delay);
-    }
-
-    // Ustawia 'top' dla .search-wrapper, nagłówków h2 i nagłówków th w tabelach
-    function updateStickyOffsets() {
-        if (!summaryEl || !searchWrapper) return;
-        const summaryHeight = summaryEl.getBoundingClientRect().height;
-        const searchHeight  = searchWrapper.getBoundingClientRect().height;
-
-        searchWrapper.style.top = summaryHeight + 'px';
-
-        mealSections.forEach(section => {
-            const header = section.querySelector('h2');
-            if (!header) return;
-
-            const h2Height = header.getBoundingClientRect().height;
-            header.style.top = (summaryHeight + searchHeight) + 'px';
-
-            const thead = section.querySelector('thead');
-            if (!thead) return;
-
-            const totalOffset = summaryHeight + searchHeight + h2Height;
-            thead.querySelectorAll('th').forEach(th => {
-                th.style.top = totalOffset + 'px';
-            });
-        });
-    }
-
-    // Wrapper, który przywraca scroll po zmianach w DOM (bez scrollIntoView)
-    function withScrollRestoration(callback) {
-        const scrollX = window.scrollX;
-        const scrollY = window.scrollY;
-        callback();
-        requestAnimationFrame(() => window.scrollTo(scrollX, scrollY));
-    }
-
     // Oblicza sumę makroskładników z zaznaczonych checkboxów
     function updateSummary() {
         let kcal = 0, protein = 0, carbs = 0, fat = 0;
@@ -83,7 +43,7 @@
         updateSectionCounts();
     }
 
-    // Dla każdej sekcji liczy, ile jest zaznaczonych i aktualizuje nagłówek h2
+    // Dla każdej sekcji liczy, ile jest zaznaczonych i aktualizuje nagłówki
     function updateSectionCounts() {
         mealSections.forEach(section => {
             const count = section.querySelectorAll('.meal:checked').length;
@@ -182,10 +142,10 @@
 
         updateSectionCounts();
     }
-    // Exponujemy globalnie, bo oninput="filterMeals()"
+    // Exponujemy globalnie, bo korzystamy z oninput="filterMeals()"
     window.filterMeals = filterMeals;
 
-    // Zwraca index pierwszej (jedynej) otwartej sekcji
+    // Zwraca index aktualnie „otwartej” sekcji (bez .collapsed)
     function getOpenSectionIndex() {
         for (let i = 0; i < mealSections.length; i++) {
             if (!mealSections[i].classList.contains('collapsed')) {
@@ -199,13 +159,10 @@
     function toggleSection(header) {
         const section = header.closest('.meal-section');
         if (!section) return;
-        // Przy manipulacji DOM chcemy zachować bieżący scroll:
-        withScrollRestoration(() => {
-            section.classList.toggle('collapsed');
-        });
+        section.classList.toggle('collapsed');
     }
 
-    // Obsługa swipe – bez przywracania scrolla, by scrollIntoView działało
+    // Gesty swipe (zależne od screenX)
     function handleSwipeGesture() {
         let touchStartX = 0;
         let touchEndX   = 0;
@@ -233,7 +190,7 @@
         }, false);
     }
 
-    // Nawigacja strzałkami – bez przywracania scrolla
+    // Nawigacja strzałkami – scrollIntoView
     function navigateSection(direction) {
         const openIndex = getOpenSectionIndex();
         if (openIndex < 0) return;
@@ -249,18 +206,16 @@
     // 3. PODPINAMY LISTENERY
     // ---------------------------------------
 
-    // 3.1. Po załadowaniu i przy resize: updateStickyOffsets (z debounce)
+    // 3.1. Po załadowaniu: updateSummary
     window.addEventListener('load', () => {
         updateSummary();
-        updateStickyOffsets();
     });
-    window.addEventListener('resize', () => debounceResize(updateStickyOffsets, 100));
 
     // 3.2. Event delegation dla checkboxów .meal
     document.addEventListener('change', (e) => {
         const target = e.target;
         if (target.classList.contains('meal') && target.type === 'checkbox') {
-            withScrollRestoration(updateSummary);
+            updateSummary();
         }
     });
 
@@ -272,10 +227,10 @@
         }
     });
 
-    // 3.4. Filtrowanie posiłków przy wpisywaniu w input (oninput="filterMeals()" też działa)
+    // 3.4. Filtrowanie posiłków przy wpisywaniu w input
     if (searchInput) {
         searchInput.addEventListener('input', () => {
-            withScrollRestoration(filterMeals);
+            filterMeals();
         });
     }
 
