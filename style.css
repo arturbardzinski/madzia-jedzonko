@@ -24,7 +24,7 @@ html {
     font-size: clamp(var(--font-min), 1.5vw, var(--font-max));
 }
 
-* {
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
@@ -44,7 +44,7 @@ main {
     clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
 }
 
-/* ========== SUMMARY (fixed top bar with macros) ========== */
+/* ========== SUMMARY BAR ========== */
 .summary {
     position: fixed;
     top: 0;
@@ -54,13 +54,12 @@ main {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    height: 56px;
+    height: var(--summary-height);
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 0 0 0.9375rem 0.9375rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
-
 .summary-item {
     display: flex;
     align-items: center;
@@ -69,17 +68,14 @@ main {
     flex-shrink: 1;
     font-size: clamp(0.75rem, 2.5vw, 1.125rem);
 }
-
 .summary-item span {
     display: inline-block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 .label.full { display: inline; }
 .label.short { display: none; }
-
 .kcal, .protein, .carbs, .fat {
     padding: 0.25rem 0.625rem;
     border-radius: 999px;
@@ -89,21 +85,19 @@ main {
 .protein   { background-color: var(--clr-bg-protein); color: var(--clr-text-protein); }
 .carbs     { background-color: var(--clr-bg-carbs);   color: var(--clr-text-carbs); }
 .fat       { background-color: var(--clr-bg-fat);     color: var(--clr-text-fat); }
-
 .unit { font-weight: bold; }
 
-/* ========== SEARCH WRAPPER (sticky search bar) ========== */
+/* ========== SEARCH BAR ========== */
 .search-wrapper {
     position: sticky;
-    top: 56px;
+    top: var(--summary-height);
     z-index: 950;
     padding: 1rem;
     background-color: #eef1f4;
     display: flex;
     justify-content: center;
-    height: 84px;
+    height: var(--search-height);
 }
-
 #searchInput {
     width: 100%;
     max-width: 20rem;
@@ -116,21 +110,19 @@ main {
     color: #333;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
 #searchInput:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
-/* ========== SECTION HEADERS (sticky h2) ========== */
+/* ========== SECTION HEADERS ========== */
 h2 {
     margin: 0;
 }
-
 .meal-section h2 {
     position: sticky;
-    top: 140px;
+    top: calc(var(--summary-height) + var(--search-height));
     z-index: 400;
     background-color: #007bff;
     color: #fff;
@@ -145,37 +137,29 @@ h2 {
     transition: background-color 0.2s ease;
 }
 
-/* ========== TABLE HEADERS (sticky) ========== */
+/* ========== TABLE ========== */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: clamp(1.875rem, 5vw, 3.125rem);
     font-size: clamp(0.8125rem, 3.5vw, 1.125rem);
 }
-
 thead th {
     position: sticky;
-    top: 176px;
+    top: calc(var(--summary-height) + var(--search-height) + 40px);
     background-color: #f9fafb;
     z-index: 80;
     box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.08);
 }
-
 th, td {
     padding: clamp(0.375rem, 2vw, 0.625rem);
     border: 0.0625rem solid #ccc;
     text-align: left;
 }
+tr:hover { background-color: #f1f1f1; }
+label { cursor: pointer; }
 
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-label {
-    cursor: pointer;
-}
-
-/* ========== COLLAPSIBLE SECTIONS (accordion) ========== */
+/* ========== COLLAPSIBLE SECTIONS ========== */
 .meal-section {
     margin-bottom: 0.3125rem;
     padding-bottom: 0.3125rem;
@@ -195,7 +179,7 @@ label {
     display: none;
 }
 
-/* ========== BOTTOM MENU (fixed) ========== */
+/* ========== BOTTOM MENU ========== */
 .bottom-menu {
     position: fixed;
     bottom: 0;
@@ -211,7 +195,6 @@ label {
     z-index: 1000;
     width: 100%;
 }
-
 .bottom-menu button {
     display: flex;
     align-items: center;
@@ -227,7 +210,7 @@ label {
     box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.04);
 }
 
-/* ========== CUSTOM ALERT (modal) ========== */
+/* ========== CUSTOM ALERT (MODAL) ========== */
 .custom-alert {
     display: none;
     position: fixed;
@@ -256,8 +239,7 @@ label {
     box-sizing: border-box;
 }
 .custom-alert-content button {
-    padding: clamp(0.375rem, 2vw, 0.5rem)
-    clamp(0.75rem, 3vw, 0.9375rem);
+    padding: clamp(0.375rem, 2vw, 0.5rem) clamp(0.75rem, 3vw, 0.9375rem);
     border: none;
     border-radius: 0.625rem;
     cursor: pointer;
@@ -269,7 +251,7 @@ label {
     white-space: nowrap;
 }
 
-/* ========== MOBILE RESPONSIVENESS (max-width: 600px) ========== */
+/* ========== MOBILE (max-width: 600px) ========== */
 @media (max-width: 600px) {
     .summary { flex-wrap: nowrap; }
     .label.full { display: none; }
@@ -277,102 +259,27 @@ label {
 
     main {
         padding: 60px clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .search-wrapper {
-        position: sticky;
-        top: 56px;
-        z-index: 950;
         height: 48px;
         padding: 0.5rem;
-        background-color: #eef1f4;
-        display: flex;
-        justify-content: center;
     }
-
     #searchInput {
-        width: 100%;
         max-width: 15rem;
         padding: 0.4rem 0.8rem;
         font-size: 0.95rem;
-        border: 1px solid #ccc;
-        border-radius: 9999px;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
-        background-color: #fff;
-        color: #333;
-        transition: border-color 0.2s, box-shadow 0.2s;
     }
-    #searchInput:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-    }
-
-    h2 { margin: 0; }
     .meal-section h2 {
-        position: sticky;
-        top: 104px;
-        z-index: 400;
-        background-color: #007bff;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 40px;
-        padding: 0 1rem;
-        font-size: clamp(1.125rem, 5vw, 1.5rem);
-        cursor: pointer;
-        user-select: none;
-        transition: background-color 0.2s;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: clamp(1.875rem, 5vw, 3.125rem);
-        font-size: clamp(0.8125rem, 3.5vw, 1.125rem);
+        top: calc(var(--summary-height) + 48px);
     }
     thead th {
-        position: sticky;
-        top: 142px;
-        background-color: #f9fafb;
-        z-index: 80;
-        box-shadow: 0 0.0625rem 0.1875rem rgba(0,0,0,0.08);
+        top: calc(var(--summary-height) + 48px + 40px);
     }
-    th, td {
-        padding: clamp(0.375rem, 2vw, 0.625rem);
-        border: 0.0625rem solid #ccc;
-        text-align: left;
-    }
-    tr:hover { background-color: #f1f1f1; }
-    label { cursor: pointer; }
-
-    .meal-section {
-        margin-bottom: 0.3125rem;
-        padding-bottom: 0.3125rem;
-    }
-    .section-content {
-        overflow: visible;
-        max-height: none;
-        opacity: 1;
-        pointer-events: auto;
-        display: block;
-        transition: none;
-    }
-    .meal-section.collapsed .section-content {
-        max-height: 0;
-        opacity: 0;
-        pointer-events: none;
-        display: none;
-    }
-
     .bottom-menu button {
         font-size: 0.875rem;
         padding: 0.375rem 0.75rem;
     }
-
     .custom-alert-content {
         font-size: 0.9375rem;
         padding: 0.875rem 1rem;
@@ -383,63 +290,26 @@ label {
     }
 }
 
-/* ========== TABLET RESPONSIVENESS (601px - 1023px) ========== */
+/* ========== TABLET (601px - 1023px) ========== */
 @media (min-width: 601px) and (max-width: 1023px) {
     main {
         padding: 60px clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
-        margin-left: auto;
-        margin-right: auto;
     }
-    .summary {
-        height: 50px;
-        font-size: 1rem;
-    }
-
-    .search-wrapper {
-        height: 64px;
-        padding: 0.75rem 1.25rem;
-    }
-
-    #searchInput {
-        max-width: 18rem;
-        font-size: 1.1rem;
-        padding: 0.45rem 1rem;
-        /* Responsive font size for tablets */
-    }
-    #searchInput:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
-    }
-
-    .meal-section h2 {
-        top: 120px;
-        font-size: 1.25rem;
-        height: 36px;
-    }
-
-    .bottom-menu button {
-        font-size: 0.95rem;
-        padding: 0.35rem 0.9rem;
-    }
-
+    .summary { height: 50px; font-size: 1rem; }
+    .search-wrapper { height: 64px; padding: 0.75rem 1.25rem; }
+    #searchInput { max-width: 18rem; font-size: 1.1rem; padding: 0.45rem 1rem; }
+    .meal-section h2 { top: calc(var(--summary-height) + 64px); font-size: 1.25rem; height: 36px; }
+    thead th { top: calc(var(--summary-height) + 64px + 36px); }
+    .bottom-menu button { font-size: 0.95rem; padding: 0.35rem 0.9rem; }
 }
 
-/* ========== DESKTOP RESPONSIVENESS (min-width: 1024px) ========== */
+/* ========== DESKTOP (min-width: 1024px) ========== */
 @media (min-width: 1024px) {
     main {
         padding-top: 60px;
         padding-bottom: 60px;
-        margin-left: auto;
-        margin-right: auto;
     }
     .search-wrapper {
-        position: sticky;
-        top: 56px;
-        z-index: 950;
-        background-color: #eef1f4;
-        display: flex;
-        justify-content: center;
         align-items: center;
         padding: clamp(0.5rem, 3vw, 1.5rem) clamp(0.5rem, 6vw, 2rem);
         min-height: clamp(2.5rem, 8vw, 4rem);
