@@ -19,6 +19,7 @@
     --search-height: 84px;
 }
 
+/* ========== GLOBAL ========== */
 html {
     font-size: clamp(var(--font-min), 1.5vw, var(--font-max));
 }
@@ -43,9 +44,7 @@ main {
     clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
 }
 
-/* --------------------------------- */
-/* 1) SUMMARY (fixed)                */
-/* --------------------------------- */
+/* ========== SUMMARY (fixed top bar with macros) ========== */
 .summary {
     position: fixed;
     top: 0;
@@ -55,8 +54,6 @@ main {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-
-    /* Dokładna wysokość summary – zmierz w DevTools i podmień, jeśli inna */
     height: 56px;
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.6);
@@ -88,7 +85,6 @@ main {
     border-radius: 999px;
     font-size: clamp(0.75rem, 2vw, 1rem);
 }
-
 .kcal      { background-color: var(--clr-bg-kcal);    color: var(--clr-text-kcal); }
 .protein   { background-color: var(--clr-bg-protein); color: var(--clr-text-protein); }
 .carbs     { background-color: var(--clr-bg-carbs);   color: var(--clr-text-carbs); }
@@ -96,79 +92,60 @@ main {
 
 .unit { font-weight: bold; }
 
-/* --------------------------------- */
-/* 2) SEARCH WRAPPER (sticky)        */
-/* --------------------------------- */
+/* ========== SEARCH WRAPPER (sticky search bar) ========== */
 .search-wrapper {
     position: sticky;
-    /* top = wysokość .summary (56px) */
     top: 56px;
     z-index: 950;
-    padding: 1rem;                /* np. 1rem góra i dół – w DevTools sprawdź dokładną wartość */
+    padding: 1rem;
     background-color: #eef1f4;
     display: flex;
     justify-content: center;
-
-    /* Dokładna wysokość .search-wrapper (zmierz w DevTools: padding + zawartość) */
-    height: 84px; /* <-- podmień, jeśli Twoje .search-wrapper ma inną wartość */
+    height: 84px;
 }
 
-/* --------- LEPSZE POLE SEARCH --------- */
 #searchInput {
     width: 100%;
-    max-width: 20rem;              /* zmniejszona maksymalna szerokość */
-    padding: 0.5rem 1rem;          /* wygodny padding wewnętrzny */
-    border: 1px solid #ccc;        /* subtelna ramka */
-    border-radius: 9999px;         /* bardzo zaokrąglone rogi */
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08); /* delikatny cień wewnętrzny */
-    font-size: 1rem;               /* spójna wielkość czcionki */
+    max-width: 20rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 9999px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+    font-size: 1rem;
     background-color: #fff;
     color: #333;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* efekt focus – niebieska obwódka i delikatny cień wokół */
 #searchInput:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
-/* --------------------------------- */
-/* 3) NAGŁÓWKI SEKCJI (h2)           */
-/* --------------------------------- */
-/* Wyśrodkowany pionowo i poziomo tekst, usunięty margines domyślny */
+/* ========== SECTION HEADERS (sticky h2) ========== */
 h2 {
     margin: 0;
 }
 
 .meal-section h2 {
     position: sticky;
-    /* top = 56px (summary) + 84px (search-wrapper) = 140px */
     top: 140px;
     z-index: 400;
     background-color: #007bff;
     color: #fff;
-
-    /* wyśrodkowanie tekstu w pionie i poziomie */
     display: flex;
     align-items: center;
     justify-content: center;
-
-    /* stała wysokość nagłówka – zmierz w DevTools, jeśli inna */
     height: 40px;
-    padding: 0 1rem;   /* jedynie padding poziomy */
-
+    padding: 0 1rem;
     font-size: clamp(1.125rem, 5vw, 1.5rem);
     cursor: pointer;
     user-select: none;
     transition: background-color 0.2s ease;
-
 }
 
-/* --------------------------------- */
-/* 4) NAGŁÓWKI TABEL (thead th)      */
-/* --------------------------------- */
+/* ========== TABLE HEADERS (sticky) ========== */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -178,7 +155,6 @@ table {
 
 thead th {
     position: sticky;
-    /* top = 56px (summary) + 84px (search-wrapper) + 40px (h2) = 180px */
     top: 176px;
     background-color: #f9fafb;
     z-index: 80;
@@ -199,14 +175,11 @@ label {
     cursor: pointer;
 }
 
-/* --------------------------------- */
-/* 5) COLLAPSIBLE SECTIONS           */
-/* --------------------------------- */
+/* ========== COLLAPSIBLE SECTIONS (accordion) ========== */
 .meal-section {
     margin-bottom: 0.3125rem;
     padding-bottom: 0.3125rem;
 }
-
 .section-content {
     overflow: visible;
     max-height: none;
@@ -215,7 +188,6 @@ label {
     display: block;
     transition: none;
 }
-
 .meal-section.collapsed .section-content {
     max-height: 0;
     opacity: 0;
@@ -223,9 +195,7 @@ label {
     display: none;
 }
 
-/* --------------------------------- */
-/* 6) BOTTOM MENU                    */
-/* --------------------------------- */
+/* ========== BOTTOM MENU (fixed) ========== */
 .bottom-menu {
     position: fixed;
     bottom: 0;
@@ -257,9 +227,7 @@ label {
     box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.04);
 }
 
-/* --------------------------------- */
-/* 7) CUSTOM ALERT                   */
-/* --------------------------------- */
+/* ========== CUSTOM ALERT (modal) ========== */
 .custom-alert {
     display: none;
     position: fixed;
@@ -270,7 +238,6 @@ label {
     align-items: center;
     z-index: 10000;
 }
-
 .custom-alert-content {
     background-color: #fff;
     padding: clamp(1rem, 3vw, 1.4375rem);
@@ -288,7 +255,6 @@ label {
     width: auto;
     box-sizing: border-box;
 }
-
 .custom-alert-content button {
     padding: clamp(0.375rem, 2vw, 0.5rem)
     clamp(0.75rem, 3vw, 0.9375rem);
@@ -303,45 +269,33 @@ label {
     white-space: nowrap;
 }
 
-/* --------------------------------- */
-/* 8) RESPONSYWNOŚĆ                  */
-/* --------------------------------- */
+/* ========== MOBILE RESPONSIVENESS (max-width: 600px) ========== */
 @media (max-width: 600px) {
-    /* 1) SUMMARY: nie zmieniamy, tylko podtrzymujemy nowrap */
-    .summary {
-        flex-wrap: nowrap;
-    }
-    .label.full {
-        display: none;
-    }
-    .label.short {
-        display: inline;
-    }
+    .summary { flex-wrap: nowrap; }
+    .label.full { display: none; }
+    .label.short { display: inline; }
 
     main {
         padding: 60px clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
-        margin-left:    auto;
-        margin-right:   auto;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-
-    /* 2) SEARCH WRAPPER: obniżamy wysokość do 48px i zmniejszamy padding */
     .search-wrapper {
         position: sticky;
-        top: 56px;           /* wysokość .summary */
+        top: 56px;
         z-index: 950;
-        height: 48px;        /* <-- sprawdź w DevTools, jeśli Twoje .search-wrapper ma inną wartość */
-        padding: 0.5rem;     /* 0.5rem góra/dół + 0.5rem lewo/prawo (zmniejszone) */
+        height: 48px;
+        padding: 0.5rem;
         background-color: #eef1f4;
         display: flex;
         justify-content: center;
     }
 
-    /* 3) POLE WYSZUKIWANIA: zmniejszamy szerokość i padding */
     #searchInput {
         width: 100%;
-        max-width: 15rem;      /* mniej szerokie na mobile */
-        padding: 0.4rem 0.8rem; /* węższy padding */
+        max-width: 15rem;
+        padding: 0.4rem 0.8rem;
         font-size: 0.95rem;
         border: 1px solid #ccc;
         border-radius: 9999px;
@@ -356,28 +310,24 @@ label {
         box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
     }
 
-    /* 4) NAGŁÓWKI SEKCJI (h2): przesuwamy do 104px (56 + 48) */
-    h2 {
-        margin: 0; /* usuń domyślny margines, aby h2 zawsze miało dokładnie 40px wysokości */
-    }
+    h2 { margin: 0; }
     .meal-section h2 {
         position: sticky;
-        top: 104px; /* 56px (summary) + 48px (search-wrapper) = 104px */
+        top: 104px;
         z-index: 400;
         background-color: #007bff;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 40px;    /* wysokość h2 */
-        padding: 0 1rem; /* tylko padding poziomy */
+        height: 40px;
+        padding: 0 1rem;
         font-size: clamp(1.125rem, 5vw, 1.5rem);
         cursor: pointer;
         user-select: none;
         transition: background-color 0.2s;
     }
 
-    /* 5) NAGŁÓWKI TABEL (thead th): przesuwamy do 144px (56 + 48 + 40) */
     table {
         width: 100%;
         border-collapse: collapse;
@@ -386,7 +336,7 @@ label {
     }
     thead th {
         position: sticky;
-        top: 142px; /* 56 (summary) + 48 (search) + 40 (h2) = 144px */
+        top: 142px;
         background-color: #f9fafb;
         z-index: 80;
         box-shadow: 0 0.0625rem 0.1875rem rgba(0,0,0,0.08);
@@ -396,14 +346,9 @@ label {
         border: 0.0625rem solid #ccc;
         text-align: left;
     }
-    tr:hover {
-        background-color: #f1f1f1;
-    }
-    label {
-        cursor: pointer;
-    }
+    tr:hover { background-color: #f1f1f1; }
+    label { cursor: pointer; }
 
-    /* 6) COLLAPSIBLE SECTIONS: bez zmian */
     .meal-section {
         margin-bottom: 0.3125rem;
         padding-bottom: 0.3125rem;
@@ -423,13 +368,11 @@ label {
         display: none;
     }
 
-    /* 7) BOTTOM MENU: minimalne korekty */
     .bottom-menu button {
         font-size: 0.875rem;
         padding: 0.375rem 0.75rem;
     }
 
-    /* 8) CUSTOM ALERT: minimalne korekty */
     .custom-alert-content {
         font-size: 0.9375rem;
         padding: 0.875rem 1rem;
@@ -439,13 +382,55 @@ label {
         padding: 0.375rem 0.75rem;
     }
 }
-@media (min-width: 601px) {
+
+/* ========== TABLET RESPONSIVENESS (601px - 1023px) ========== */
+@media (min-width: 601px) and (max-width: 1023px) {
     main {
-        /* góra/dół po 60px */
-        padding-top:    60px;
+        padding: 60px clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .summary {
+        height: 50px;
+        font-size: 1rem;
+    }
+
+    .search-wrapper {
+        height: 64px;
+        padding: 0.75rem 1.25rem;
+    }
+
+    #searchInput {
+        max-width: 18rem;
+        font-size: 1.1rem;
+        padding: 0.45rem 1rem;
+        /* Responsive font size for tablets */
+    }
+    #searchInput:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    }
+
+    .meal-section h2 {
+        top: 120px;
+        font-size: 1.25rem;
+        height: 36px;
+    }
+
+    .bottom-menu button {
+        font-size: 0.95rem;
+        padding: 0.35rem 0.9rem;
+    }
+
+}
+
+/* ========== DESKTOP RESPONSIVENESS (min-width: 1024px) ========== */
+@media (min-width: 1024px) {
+    main {
+        padding-top: 60px;
         padding-bottom: 60px;
-        /* lewo/prawo auto → centrowanie */
-        margin-left:  auto;
+        margin-left: auto;
         margin-right: auto;
     }
     .search-wrapper {
@@ -455,18 +440,13 @@ label {
         background-color: #eef1f4;
         display: flex;
         justify-content: center;
-        align-items: center;  /* ważne, żeby input był na środku */
+        align-items: center;
         padding: clamp(0.5rem, 3vw, 1.5rem) clamp(0.5rem, 6vw, 2rem);
         min-height: clamp(2.5rem, 8vw, 4rem);
-
     }
-
-        #searchInput {
-            /* zmniejszony maksymalny rozmiar */
-            max-width: 15rem;
-            /* mniejszy padding, żeby nie był tak "wysoki" */
-            padding: 0.4rem 0.8rem;
-            font-size: 1rem;
-        }
+    #searchInput {
+        max-width: 20rem;
+        padding: 0.5rem 1rem;
+        font-size: 1.12rem;
     }
-
+}

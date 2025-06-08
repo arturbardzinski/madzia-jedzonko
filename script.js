@@ -1,7 +1,5 @@
 ;(function() {
-    // ---------------------------------------
     // 1. CACHE’UJEMY ELEMENTY
-    // ---------------------------------------
     const summaryEl       = document.querySelector('.summary');
     const searchWrapper   = document.querySelector('.search-wrapper');
     const mealSections    = Array.from(document.querySelectorAll('.meal-section'));
@@ -19,11 +17,8 @@
         return;
     }
 
-    // ---------------------------------------
     // 2. POMOCNICZE FUNKCJE
-    // ---------------------------------------
 
-    // Oblicza sumę makroskładników z zaznaczonych checkboxów
     function updateSummary() {
         let kcal = 0, protein = 0, carbs = 0, fat = 0;
         const checkedBoxes = document.querySelectorAll('.meal:checked');
@@ -43,7 +38,6 @@
         updateSectionCounts();
     }
 
-    // Dla każdej sekcji liczy, ile jest zaznaczonych i aktualizuje nagłówki
     function updateSectionCounts() {
         mealSections.forEach(section => {
             const count = section.querySelectorAll('.meal:checked').length;
@@ -62,7 +56,6 @@
         });
     }
 
-    // Kopiuje nazwy posiłków do schowka
     async function copyMeals() {
         const selectedMeals = Array
             .from(document.querySelectorAll('.meal:checked'))
@@ -84,10 +77,8 @@
             showAlert('Nie zaznaczono żadnych posiłków.');
         }
     }
-    // Exponujemy globalnie, by działało onclick="copyMeals()"
     window.copyMeals = copyMeals;
 
-    // Kopiuje podsumowanie makroskładników do schowka
     async function copyMacros() {
         const kcal    = totalKcal.textContent;
         const protein = totalProtein.textContent;
@@ -107,22 +98,18 @@
             showAlert('Błąd podczas kopiowania podsumowania makroskładników.');
         }
     }
-    // Exponujemy globalnie, by działało onclick="copyMacros()"
     window.copyMacros = copyMacros;
 
-    // Wyświetla niestandardowy alert
     function showAlert(message) {
         customAlertText.textContent = message;
         customAlert.style.display = 'flex';
     }
 
-    // Ukrywa alert (potrzebne dla onclick="closeAlert()")
     function closeAlert() {
         customAlert.style.display = 'none';
     }
     window.closeAlert = closeAlert;
 
-    // Filtrowanie posiłków: pokazuje/ukrywa wiersze i aktualizuje liczniki
     function filterMeals() {
         const query = (searchInput.value || '').trim().toLowerCase();
 
@@ -142,10 +129,8 @@
 
         updateSectionCounts();
     }
-    // Exponujemy globalnie, bo korzystamy z oninput="filterMeals()"
     window.filterMeals = filterMeals;
 
-    // Zwraca index aktualnie „otwartej” sekcji (bez .collapsed)
     function getOpenSectionIndex() {
         for (let i = 0; i < mealSections.length; i++) {
             if (!mealSections[i].classList.contains('collapsed')) {
@@ -155,14 +140,12 @@
         return -1;
     }
 
-    // Toggle collapse danej sekcji (po kliknięciu w h2)
     function toggleSection(header) {
         const section = header.closest('.meal-section');
         if (!section) return;
         section.classList.toggle('collapsed');
     }
 
-    // Gesty swipe (zależne od screenX)
     function handleSwipeGesture() {
         let touchStartX = 0;
         let touchEndX   = 0;
@@ -190,7 +173,6 @@
         }, false);
     }
 
-    // Nawigacja strzałkami – scrollIntoView
     function navigateSection(direction) {
         const openIndex = getOpenSectionIndex();
         if (openIndex < 0) return;
@@ -202,16 +184,12 @@
         mealSections[nextIndex].scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ---------------------------------------
     // 3. PODPINAMY LISTENERY
-    // ---------------------------------------
 
-    // 3.1. Po załadowaniu: updateSummary
     window.addEventListener('load', () => {
         updateSummary();
     });
 
-    // 3.2. Event delegation dla checkboxów .meal
     document.addEventListener('change', (e) => {
         const target = e.target;
         if (target.classList.contains('meal') && target.type === 'checkbox') {
@@ -219,7 +197,6 @@
         }
     });
 
-    // 3.3. Kliknięcie w nagłówek h2 sekcji → toggle collapse
     mealSections.forEach(section => {
         const header = section.querySelector('h2');
         if (header) {
@@ -227,17 +204,14 @@
         }
     });
 
-    // 3.4. Filtrowanie posiłków przy wpisywaniu w input
     if (searchInput) {
         searchInput.addEventListener('input', () => {
             filterMeals();
         });
     }
 
-    // 3.5. Gesty dotykowe
     handleSwipeGesture();
 
-    // 3.6. Nawigacja w bottom-menu (strzałki)
     if (prevSectionBtn) {
         prevSectionBtn.addEventListener('click', () => navigateSection(-1));
     }
