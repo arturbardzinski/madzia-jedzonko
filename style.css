@@ -295,7 +295,7 @@ label { cursor: pointer; }
     main {
         padding: 60px clamp(var(--main-pad-min-horizontal), 3vw, var(--main-pad-max-horizontal));
     }
-    .summary { height: 50px; font-size: 1rem; }
+    .summary { font-size: 1rem; }
     .search-wrapper { height: 64px; padding: 0.75rem 1.25rem; }
     #searchInput { max-width: 18rem; font-size: 1.1rem; padding: 0.45rem 1rem; }
     .meal-section h2 { top: calc(var(--summary-height) + 64px); font-size: 1.25rem; height: 36px; }
