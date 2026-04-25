@@ -1,5 +1,4 @@
 ;(function() {
-    // 1. CACHE’UJEMY ELEMENTY
     const summaryEl       = document.querySelector('.summary');
     const searchWrapper   = document.querySelector('.search-wrapper');
     const mealSections    = Array.from(document.querySelectorAll('.meal-section'));
@@ -10,22 +9,71 @@
     const searchInput     = document.getElementById('searchInput');
     const prevSectionBtn  = document.getElementById('prevSection');
     const nextSectionBtn  = document.getElementById('nextSection');
+    const copyMealsBtn    = document.getElementById('copyMealsBtn');
+    const copyMacrosBtn   = document.getElementById('copyMacrosBtn');
     const customAlert     = document.getElementById('customAlert');
     const customAlertText = document.getElementById('customAlertText');
+    const closeAlertBtn   = document.getElementById('closeAlertBtn');
+    const mealsData       = window.MEALS_DATA || {};
+
+    let mealCheckboxes = [];
+    let sectionRows = [];
 
     if (!summaryEl || !searchWrapper) {
         return;
     }
 
-    // 2. POMOCNICZE FUNKCJE
+    function createMealRow(meal) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <input type="checkbox" class="meal"
+                       data-kcal="${meal.kcal}"
+                       data-protein="${meal.protein}"
+                       data-carbs="${meal.carbs}"
+                       data-fat="${meal.fat}">
+            </td>
+            <td>${meal.name}</td>
+            <td>${meal.kcal}</td>
+            <td>${meal.protein}</td>
+            <td>${meal.carbs}</td>
+            <td>${meal.fat}</td>
+        `;
+        return row;
+    }
+
+    function refreshCaches() {
+        mealCheckboxes = Array.from(document.querySelectorAll('.meal'));
+        sectionRows = mealSections.map(section => ({
+            section,
+            rows: Array.from(section.querySelectorAll('tbody tr'))
+        }));
+    }
+
+    function renderMealsFromData() {
+        mealSections.forEach(section => {
+            const sectionName = section.dataset.section || '';
+            const meals = mealsData[sectionName] || [];
+            const tbody = section.querySelector('tbody');
+            if (!tbody) return;
+
+            const fragment = document.createDocumentFragment();
+            meals.forEach(meal => {
+                fragment.appendChild(createMealRow(meal));
+            });
+
+            tbody.replaceChildren(fragment);
+        });
+
+        refreshCaches();
+    }
 
     function updateSummary() {
         let kcal = 0, protein = 0, carbs = 0, fat = 0;
-        const checkedBoxes = document.querySelectorAll('.meal:checked');
-
-        checkedBoxes.forEach(cb => {
+        mealCheckboxes.forEach(cb => {
+            if (!cb.checked) return;
             kcal    += +(cb.dataset.kcal    || 0);
-            protein += +(cb.dataset.protein|| 0);
+            protein += +(cb.dataset.protein || 0);
             carbs   += +(cb.dataset.carbs  || 0);
             fat     += +(cb.dataset.fat    || 0);
         });
@@ -39,8 +87,11 @@
     }
 
     function updateSectionCounts() {
-        mealSections.forEach(section => {
-            const count = section.querySelectorAll('.meal:checked').length;
+        sectionRows.forEach(({ section, rows }) => {
+            const count = rows.reduce((selectedCount, row) => {
+                const checkbox = row.querySelector('.meal');
+                return selectedCount + (checkbox?.checked ? 1 : 0);
+            }, 0);
             const header = section.querySelector('h2');
             if (!header) return;
 
@@ -58,7 +109,8 @@
 
     async function copyMeals() {
         const selectedMeals = Array
-            .from(document.querySelectorAll('.meal:checked'))
+            .from(mealCheckboxes)
+            .filter(cb => cb.checked)
             .map(cb => {
                 const td = cb.closest('tr')?.querySelector('td:nth-child(2)');
                 return td ? td.textContent.trim() : '';
@@ -77,7 +129,6 @@
             showAlert('Nie zaznaczono żadnych posiłków.');
         }
     }
-    window.copyMeals = copyMeals;
 
     async function copyMacros() {
         const kcal    = totalKcal.textContent;
@@ -98,24 +149,22 @@
             showAlert('Błąd podczas kopiowania podsumowania makroskładników.');
         }
     }
-    window.copyMacros = copyMacros;
 
     function showAlert(message) {
         customAlertText.textContent = message;
         customAlert.style.display = 'flex';
+        closeAlertBtn?.focus();
     }
 
     function closeAlert() {
         customAlert.style.display = 'none';
     }
-    window.closeAlert = closeAlert;
 
     function filterMeals() {
         const query = (searchInput.value || '').trim().toLowerCase();
 
-        mealSections.forEach(section => {
+        sectionRows.forEach(({ section, rows }) => {
             let foundInSection = false;
-            const rows = section.querySelectorAll('tbody tr');
 
             rows.forEach(row => {
                 const mealName = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
@@ -129,7 +178,6 @@
 
         updateSectionCounts();
     }
-    window.filterMeals = filterMeals;
 
     function getOpenSectionIndex() {
         for (let i = 0; i < mealSections.length; i++) {
@@ -184,9 +232,8 @@
         mealSections[nextIndex].scrollIntoView({ behavior: 'smooth' });
     }
 
-    // 3. PODPINAMY LISTENERY
-
     window.addEventListener('load', () => {
+        renderMealsFromData();
         updateSummary();
     });
 
@@ -209,6 +256,32 @@
             filterMeals();
         });
     }
+
+    if (copyMealsBtn) {
+        copyMealsBtn.addEventListener('click', copyMeals);
+    }
+
+    if (copyMacrosBtn) {
+        copyMacrosBtn.addEventListener('click', copyMacros);
+    }
+
+    if (closeAlertBtn) {
+        closeAlertBtn.addEventListener('click', closeAlert);
+    }
+
+    if (customAlert) {
+        customAlert.addEventListener('click', (e) => {
+            if (e.target === customAlert) {
+                closeAlert();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && customAlert?.style.display === 'flex') {
+            closeAlert();
+        }
+    });
 
     handleSwipeGesture();
 
