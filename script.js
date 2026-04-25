@@ -5,6 +5,7 @@
     const summaryEl       = document.querySelector('.summary');
     const searchWrapper   = document.querySelector('.search-wrapper');
     const mealSections    = Array.from(document.querySelectorAll('.meal-section'));
+    const mealCheckboxes  = Array.from(document.querySelectorAll('.meal'));
     const totalKcal       = document.getElementById('totalKcal');
     const totalProtein    = document.getElementById('totalProtein');
     const totalCarbs      = document.getElementById('totalCarbs');
@@ -12,8 +13,15 @@
     const searchInput     = document.getElementById('searchInput');
     const prevSectionBtn  = document.getElementById('prevSection');
     const nextSectionBtn  = document.getElementById('nextSection');
+    const copyMealsBtn    = document.getElementById('copyMealsBtn');
+    const copyMacrosBtn   = document.getElementById('copyMacrosBtn');
     const customAlert     = document.getElementById('customAlert');
     const customAlertText = document.getElementById('customAlertText');
+    const closeAlertBtn   = document.getElementById('closeAlertBtn');
+    const sectionRows     = mealSections.map(section => ({
+        section,
+        rows: Array.from(section.querySelectorAll('tbody tr'))
+    }));
 
     if (!summaryEl || !searchWrapper) {
         return;
@@ -26,11 +34,10 @@
     // Oblicza sumę makroskładników z zaznaczonych checkboxów
     function updateSummary() {
         let kcal = 0, protein = 0, carbs = 0, fat = 0;
-        const checkedBoxes = document.querySelectorAll('.meal:checked');
-
-        checkedBoxes.forEach(cb => {
+        mealCheckboxes.forEach(cb => {
+            if (!cb.checked) return;
             kcal    += +(cb.dataset.kcal    || 0);
-            protein += +(cb.dataset.protein|| 0);
+            protein += +(cb.dataset.protein || 0);
             carbs   += +(cb.dataset.carbs  || 0);
             fat     += +(cb.dataset.fat    || 0);
         });
@@ -45,8 +52,11 @@
 
     // Dla każdej sekcji liczy, ile jest zaznaczonych i aktualizuje nagłówki
     function updateSectionCounts() {
-        mealSections.forEach(section => {
-            const count = section.querySelectorAll('.meal:checked').length;
+        sectionRows.forEach(({ section, rows }) => {
+            const count = rows.reduce((selectedCount, row) => {
+                const checkbox = row.querySelector('.meal');
+                return selectedCount + (checkbox?.checked ? 1 : 0);
+            }, 0);
             const header = section.querySelector('h2');
             if (!header) return;
 
@@ -65,7 +75,8 @@
     // Kopiuje nazwy posiłków do schowka
     async function copyMeals() {
         const selectedMeals = Array
-            .from(document.querySelectorAll('.meal:checked'))
+            .from(mealCheckboxes)
+            .filter(cb => cb.checked)
             .map(cb => {
                 const td = cb.closest('tr')?.querySelector('td:nth-child(2)');
                 return td ? td.textContent.trim() : '';
@@ -84,9 +95,6 @@
             showAlert('Nie zaznaczono żadnych posiłków.');
         }
     }
-    // Exponujemy globalnie, by działało onclick="copyMeals()"
-    window.copyMeals = copyMeals;
-
     // Kopiuje podsumowanie makroskładników do schowka
     async function copyMacros() {
         const kcal    = totalKcal.textContent;
@@ -107,28 +115,23 @@
             showAlert('Błąd podczas kopiowania podsumowania makroskładników.');
         }
     }
-    // Exponujemy globalnie, by działało onclick="copyMacros()"
-    window.copyMacros = copyMacros;
-
     // Wyświetla niestandardowy alert
     function showAlert(message) {
         customAlertText.textContent = message;
         customAlert.style.display = 'flex';
+        closeAlertBtn?.focus();
     }
 
     // Ukrywa alert (potrzebne dla onclick="closeAlert()")
     function closeAlert() {
         customAlert.style.display = 'none';
     }
-    window.closeAlert = closeAlert;
-
     // Filtrowanie posiłków: pokazuje/ukrywa wiersze i aktualizuje liczniki
     function filterMeals() {
         const query = (searchInput.value || '').trim().toLowerCase();
 
-        mealSections.forEach(section => {
+        sectionRows.forEach(({ section, rows }) => {
             let foundInSection = false;
-            const rows = section.querySelectorAll('tbody tr');
 
             rows.forEach(row => {
                 const mealName = row.querySelector('td:nth-child(2)')?.textContent.toLowerCase() || '';
@@ -142,9 +145,6 @@
 
         updateSectionCounts();
     }
-    // Exponujemy globalnie, bo korzystamy z oninput="filterMeals()"
-    window.filterMeals = filterMeals;
-
     // Zwraca index aktualnie „otwartej” sekcji (bez .collapsed)
     function getOpenSectionIndex() {
         for (let i = 0; i < mealSections.length; i++) {
@@ -234,6 +234,31 @@
         });
     }
 
+    if (copyMealsBtn) {
+        copyMealsBtn.addEventListener('click', copyMeals);
+    }
+
+    if (copyMacrosBtn) {
+        copyMacrosBtn.addEventListener('click', copyMacros);
+    }
+
+    if (closeAlertBtn) {
+        closeAlertBtn.addEventListener('click', closeAlert);
+    }
+
+    if (customAlert) {
+        customAlert.addEventListener('click', (e) => {
+            if (e.target === customAlert) {
+                closeAlert();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && customAlert?.style.display === 'flex') {
+            closeAlert();
+        }
+    });
     // 3.5. Gesty dotykowe
     handleSwipeGesture();
 

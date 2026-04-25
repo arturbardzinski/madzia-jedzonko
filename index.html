@@ -17,7 +17,7 @@
         <div class="summary-item"><span class="label full">Tłuszcze:</span><span class="label short">T:</span> <span class="fat" id="totalFat">0</span> <span class="unit">g</span></div>
     </div>
     <div class="search-wrapper">
-        <input type="text" id="searchInput" placeholder="Szukaj ..." oninput="filterMeals()" />
+        <input type="text" id="searchInput" placeholder="Szukaj ..." aria-label="Szukaj posiłków" />
     </div>
 
     <section class="meal-section" data-section="ŚNIADANIE">
@@ -2702,10 +2702,10 @@
     <button id="prevSection" aria-label="Poprzednia sekcja">
         <span class="material-icons-outlined">arrow_back_ios</span>
     </button>
-    <button onclick="copyMeals()" title="Kopiuj posiłki">
+    <button id="copyMealsBtn" title="Kopiuj posiłki" aria-label="Kopiuj posiłki">
         <span class="material-icons-outlined">content_copy</span>
     </button>
-    <button onclick="copyMacros()" title="Kopiuj makro">
+    <button id="copyMacrosBtn" title="Kopiuj makro" aria-label="Kopiuj makro">
         <span class="material-icons-outlined">assessment</span>
     </button>
     <button id="nextSection" aria-label="Następna sekcja">
@@ -2714,10 +2714,10 @@
 </div>
 
 
-<div id="customAlert" class="custom-alert">
+<div id="customAlert" class="custom-alert" role="dialog" aria-modal="true" aria-labelledby="customAlertText">
     <div class="custom-alert-content">
         <span id="customAlertText"></span>
-        <button onclick="closeAlert()">OK</button>
+        <button id="closeAlertBtn">OK</button>
     </div>
 </div>
 
